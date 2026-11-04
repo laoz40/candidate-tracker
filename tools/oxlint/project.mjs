@@ -47,10 +47,37 @@ const noSuppressions = defineRule({
   },
 });
 
+const noRelativeImports = defineRule({
+  meta: {
+    type: "problem",
+    schema: [],
+    messages: { forbidden: "Use a package import or path alias instead of a relative import." },
+  },
+  create(context) {
+    function check(node) {
+      if (/^(?:\.{1,2})(?:\/|$)/u.test(String(node.value))) {
+        context.report({ node, messageId: "forbidden" });
+      }
+    }
+
+    return {
+      "ImportDeclaration > Literal.source": check,
+      "ExportNamedDeclaration > Literal.source": check,
+      "ExportAllDeclaration > Literal.source": check,
+      "ImportExpression > Literal.source": check,
+      "CallExpression[callee.name='require'] > Literal.arguments": check,
+      "TSImportType > Literal": check,
+      "TSImportType > TSLiteralType > Literal": check,
+      "TSExternalModuleReference > Literal.expression": check,
+    };
+  },
+});
+
 export default eslintCompatPlugin({
   meta: { name: "project" },
   rules: {
     "no-em-dash": noEmDash,
     "no-suppressions": noSuppressions,
+    "no-relative-imports": noRelativeImports,
   },
 });

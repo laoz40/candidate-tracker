@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
-import { app } from "./app.js";
+import { app } from "#app";
 
 const port = Number(process.env.PORT ?? 3000);
 
