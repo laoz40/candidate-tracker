@@ -1,0 +1,6 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "oxc"],
+  "ignorePatterns": ["**/dist/**", "**/routeTree.gen.ts"],
+  "overrides": [{ "files": ["apps/web/**/*.tsx"], "jsPlugins": ["@shadcn/lint"] }]
+}

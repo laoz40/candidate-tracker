@@ -1,0 +1,10 @@
+{
+  "ignorePatterns": [
+    "docs/**",
+    "AGENTS.md",
+    "README.md",
+    "pnpm-lock.yaml",
+    "**/routeTree.gen.ts",
+    "**/dist/**"
+  ]
+}
