@@ -97,7 +97,9 @@
     "anti-slop/require-safety-comment-for-type-assertion": "error",
     "project/no-em-dash": "error",
     "project/no-suppressions": "error",
-    "project/no-relative-imports": "error"
+    "project/no-relative-imports": "error",
+    "project/no-backend-layer-imports": "error",
+    "project/focused-repository-operations": "error"
   },
   "options": {
     "typeAware": true
