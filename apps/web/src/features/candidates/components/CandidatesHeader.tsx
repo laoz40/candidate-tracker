@@ -3,13 +3,16 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { AddCandidateDialog } from "@/features/candidates/components/AddCandidateDialog";
 import type { Dispatch } from "react";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import type { CandidateSummaryAction } from "@/features/candidates/lib/candidate-summary";
 
 export function CandidatesHeader({
   count,
   dispatch,
 }: {
   count: number;
-  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
+  dispatch: Dispatch<
+    Extract<CandidatesAction, { type: "candidateCreated" }> | CandidateSummaryAction
+  >;
 }) {
   return (
     <header className="flex min-h-20 shrink-0 flex-wrap items-center gap-3 px-6 py-4">

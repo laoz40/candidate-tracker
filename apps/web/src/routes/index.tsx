@@ -44,6 +44,8 @@ function CandidatesRoute() {
     archive,
     stageChangeState,
     changeStage,
+    summaryState,
+    generateSummary,
   } = useCandidates(filters);
 
   return (
@@ -87,6 +89,8 @@ function CandidatesRoute() {
           {selected ? (
             <CandidateSidePane
               candidate={selected}
+              summaryState={summaryState}
+              onGenerateSummary={generateSummary}
               archiveState={archiveState}
               stageChangeState={stageChangeState}
               onStageChange={changeStage}

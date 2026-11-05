@@ -19,19 +19,6 @@ export async function requestCandidateSummary(id: string) {
   return response.json();
 }
 
-export async function logCandidateSummary(id: string) {
-  try {
-    const summary = await requestCandidateSummary(id);
-    console.log("AI Summary", { candidateId: id, summary });
-  } catch (error) {
-    console.error("AI summary generation failed", {
-      candidateId: id,
-      error,
-      details: error instanceof Error ? error.cause : undefined,
-    });
-  }
-}
-
 export async function listCandidates(query: CandidateListQuery, signal: AbortSignal) {
   const response = await client.candidates.$get({ query }, { init: { signal } });
 

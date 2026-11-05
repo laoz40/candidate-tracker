@@ -7,11 +7,15 @@ import { CandidateNotes } from "@/features/candidates/components/CandidateNotes"
 import { CandidatePaneHeader } from "@/features/candidates/components/CandidatePaneHeader";
 import { CandidateProfileFields } from "@/features/candidates/components/CandidateProfileFields";
 import { CandidateResume } from "@/features/candidates/components/CandidateResume";
+import { CandidateSummary } from "@/features/candidates/components/CandidateSummary";
+import type { CandidateSummaryState } from "@/features/candidates/lib/candidate-summary";
 import { Separator } from "@/components/ui/separator";
 import type { Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateSidePaneProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Candidate;
+  summaryState: CandidateSummaryState;
+  onGenerateSummary: () => Promise<void>;
   archiveState: CandidateMutationStatus;
   onArchive: (candidateId: string) => Promise<void>;
   dispatch: Dispatch<Extract<CandidatesAction, { type: "paneClosed" | "noteAdded" }>>;
@@ -19,6 +23,8 @@ type CandidateSidePaneProps = Pick<StageMenuProps, "stageChangeState" | "onStage
 
 export function CandidateSidePane({
   candidate,
+  summaryState,
+  onGenerateSummary,
   dispatch,
   archiveState,
   onArchive,
@@ -38,6 +44,10 @@ export function CandidateSidePane({
           onStageChange={onStageChange}
         />
         <CandidateProfileFields candidate={candidate} />
+        <CandidateSummary
+          state={summaryState}
+          onGenerate={onGenerateSummary}
+        />
         <Separator />
         <CandidateResume candidate={candidate} />
         <Separator />

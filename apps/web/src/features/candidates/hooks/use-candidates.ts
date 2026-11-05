@@ -8,9 +8,14 @@ import {
   listCandidates,
 } from "@/features/candidates/lib/candidates-api";
 import { candidatesReducer } from "@/features/candidates/lib/candidates-reducer";
+import {
+  generateCandidateSummary,
+  type CandidateSummaryState,
+} from "@/features/candidates/lib/candidate-summary";
 
 export function useCandidates(filters: CandidateFilters) {
   const [state, dispatch] = useReducer(candidatesReducer, {
+    summaries: new Map(),
     list: { candidates: [], revision: 0, load: { kind: "loading" } },
     mutations: { stageChange: { kind: "idle" }, archive: { kind: "idle" } },
     pane: { kind: "closed" },
@@ -71,7 +76,19 @@ export function useCandidates(filters: CandidateFilters) {
   const selectedId = state.pane.kind === "open" ? state.pane.candidateId : null;
   const selected = state.list.candidates.find((candidate) => candidate.id === selectedId);
 
+  const summaryState: CandidateSummaryState = state.summaries.get(selectedId ?? "") ?? {
+    kind: "idle",
+  };
+
+  async function generateSummary() {
+    if (!selectedId || summaryState.kind === "generating" || summaryState.kind === "ready") return;
+
+    await generateCandidateSummary(selectedId, dispatch);
+  }
+
   return {
+    summaryState,
+    generateSummary,
     roles: activeRoles,
     candidates: state.list.candidates,
     load: state.list.load,

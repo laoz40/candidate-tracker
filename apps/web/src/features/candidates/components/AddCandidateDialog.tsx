@@ -30,7 +30,11 @@ import {
   emptyCandidateForm,
 } from "@/features/candidates/lib/candidate-form";
 import { randomCandidateForm } from "@/features/candidates/lib/random-candidate";
-import { logCandidateSummary, saveCandidate } from "@/features/candidates/lib/candidates-api";
+import { saveCandidate } from "@/features/candidates/lib/candidates-api";
+import {
+  generateCandidateSummary,
+  type CandidateSummaryAction,
+} from "@/features/candidates/lib/candidate-summary";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 
 const contactFields = [
@@ -48,7 +52,9 @@ const contactFields = [
 export function AddCandidateDialog({
   dispatch,
 }: {
-  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
+  dispatch: Dispatch<
+    Extract<CandidatesAction, { type: "candidateCreated" }> | CandidateSummaryAction
+  >;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -81,7 +87,9 @@ function AddCandidateForm({
   dispatch,
   onCreated,
 }: {
-  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
+  dispatch: Dispatch<
+    Extract<CandidatesAction, { type: "candidateCreated" }> | CandidateSummaryAction
+  >;
   onCreated: () => void;
 }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -99,7 +107,7 @@ function AddCandidateForm({
 
         dispatch({ type: "candidateCreated", candidate });
         onCreated();
-        void logCandidateSummary(candidate.id);
+        void generateCandidateSummary(candidate.id, dispatch);
       } catch (error) {
         setSubmitError(
           error instanceof Error ? error.message : "Could not save candidate. Please try again.",

@@ -1,5 +1,10 @@
 import type { Candidate, Stage } from "@/features/candidates/lib/candidates";
 import {
+  candidateSummaryReducer,
+  type CandidateSummaryAction,
+  type CandidateSummaryState,
+} from "@/features/candidates/lib/candidate-summary";
+import {
   candidateListReducer,
   type CandidateListState,
 } from "@/features/candidates/lib/candidate-list-reducer";
@@ -22,12 +27,14 @@ export type CandidateFilters = {
 };
 
 export type CandidatesState = {
+  summaries: Map<string, CandidateSummaryState>;
   list: CandidateListState;
   mutations: CandidateMutationState;
   pane: CandidatePaneState;
 };
 
 export type CandidatesAction =
+  | CandidateSummaryAction
   | { type: "candidatesLoadStarted" }
   | { type: "candidatesLoaded"; candidates: Candidate[]; revision: number }
   | { type: "candidatesLoadFailed"; message: string }
@@ -47,6 +54,12 @@ export function candidatesReducer(
   action: CandidatesAction,
 ): CandidatesState {
   return {
+    summaries:
+      action.type === "summaryStarted" ||
+      action.type === "summaryGenerated" ||
+      action.type === "summaryFailed"
+        ? candidateSummaryReducer(state.summaries, action)
+        : state.summaries,
     list: candidateListReducer(state.list, action),
     mutations: candidateMutationReducer(state.mutations, action),
     pane: candidatePaneReducer(state.pane, action),
