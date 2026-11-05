@@ -27,3 +27,11 @@ I chose Oxlint for its speed and support for ESLint-compatible plugins.
 ## Validation (Zod)
 
 I chose Zod because it lets me define validation rules in schemas instead of writing the validation logic manually. It integrates well with other libraries and works in both the frontend and backend, allowing schemas to be shared where the validation requirements match. It also lets me infer TypeScript types from those schemas, keeping validation rules and types in sync while reducing duplication.
+
+## AI integration (Vercel AI SDK)
+
+I chose Vercel AI SDK over a provider-specific SDK because it makes switching providers easier. It supports OpenAI, Anthropic, Google Generative AI, and cloud options such as Amazon Bedrock, Microsoft Azure, and Google Vertex AI. Those cloud options could be useful for the deployment requirements in the project brief.
+
+For this text summarisation feature, the API looked simple and the documentation detailed. Using a shared SDK should keep provider changes small. The tradeoff is that I can only use providers supported by Vercel AI SDK, but it supports all the providers I considered.
+
+I also considered TanStack AI. I had heard good things about it, particularly its type safety, but felt it was too new for this project and preferred the more mature Vercel AI SDK.

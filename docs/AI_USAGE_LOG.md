@@ -47,3 +47,9 @@ When I asked AI to remove a separate constants file, it defined `DOCUMENT_MAX_CH
 Duplicating a shared rule means remembering to update every copy. Missing one could make PDF extraction and candidate validation enforce different limits. This is a pattern I watch for in AI code: creating another constant or function instead of reusing what already exists.
 
 Code: `apps/server/src/features/documents/document.service.ts` and `apps/server/src/features/candidates/candidate.schema.ts`.
+
+## Correcting the AI summary schema and error handling
+
+The AI generated `apps/server/src/features/ai/summary.schema.ts` using `z.discriminatedUnion`. With the installed library versions, this produced a nested `oneOf` that OpenAI rejected. Replacing it with `z.union` produced a supported `anyOf` and fixed the request.
+
+The app's generic "Could not generate summary" response hid the provider error. I improved error handling in this module so we could diagnose provider failures through the application. The change added error categories and development-only provider details without introducing an exhaustive Result abstraction.
