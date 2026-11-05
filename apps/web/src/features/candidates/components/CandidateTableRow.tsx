@@ -1,3 +1,4 @@
+import type { StageMenuProps } from "@/features/candidates/components/StageMenu";
 import type { Dispatch } from "react";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -5,13 +6,19 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { StageBadge, StageMenu } from "@/features/candidates/components/StageMenu";
 import { initials, formatDate, type Candidate } from "@/features/candidates/lib/candidates";
 
-type CandidateTableRowProps = {
+type CandidateTableRowProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Candidate;
   isSelected: boolean;
   dispatch: Dispatch<CandidatesAction>;
 };
 
-export function CandidateTableRow({ candidate, isSelected, dispatch }: CandidateTableRowProps) {
+export function CandidateTableRow({
+  candidate,
+  isSelected,
+  dispatch,
+  stageChangeState,
+  onStageChange,
+}: CandidateTableRowProps) {
   return (
     <TableRow
       className="cursor-pointer"
@@ -36,7 +43,8 @@ export function CandidateTableRow({ candidate, isSelected, dispatch }: Candidate
         <div className="flex justify-end">
           <StageMenu
             candidate={candidate}
-            dispatch={dispatch}
+            stageChangeState={stageChangeState}
+            onStageChange={onStageChange}
           />
         </div>
       </TableCell>

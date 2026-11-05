@@ -67,6 +67,10 @@ export const candidateService = {
     );
   },
 
+  changeStage: async (id: string, stage: CandidateStage) => {
+    return candidateRepository.changeStage(id, stage);
+  },
+
   archive: async (id: string) => {
     return candidateRepository.archive(id);
   },

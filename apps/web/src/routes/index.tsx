@@ -11,8 +11,17 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({ component: CandidatesRoute });
 
 function CandidatesRoute() {
-  const { candidates, selectedId, selected, dispatch, load, archiveState, archive } =
-    useCandidates();
+  const {
+    candidates,
+    selectedId,
+    selected,
+    dispatch,
+    load,
+    archiveState,
+    archive,
+    stageChangeState,
+    changeStage,
+  } = useCandidates();
 
   return (
     <SidebarProvider>
@@ -41,6 +50,8 @@ function CandidatesRoute() {
               <CandidateTable
                 candidates={candidates}
                 selectedId={selectedId}
+                stageChangeState={stageChangeState}
+                onStageChange={changeStage}
                 dispatch={dispatch}
               />
             ) : null}
@@ -49,6 +60,8 @@ function CandidatesRoute() {
             <CandidateSidePane
               candidate={selected}
               archiveState={archiveState}
+              stageChangeState={stageChangeState}
+              onStageChange={changeStage}
               onArchive={archive}
               dispatch={dispatch}
             />

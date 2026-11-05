@@ -7,7 +7,10 @@ export type ArchiveState =
   | { kind: "saving"; candidateId: string }
   | { kind: "error"; candidateId: string };
 
+export type StageChangeState = ArchiveState;
+
 export type CandidatesState = {
+  stageChange: StageChangeState;
   archive: ArchiveState;
   candidates: Candidate[];
   pane: PaneState;
@@ -23,6 +26,7 @@ export type CandidatesAction =
   | { type: "candidateArchived"; candidateId: string }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
+  | { type: "stageChangeStateChanged"; state: StageChangeState }
   | { type: "stageChanged"; candidateId: string; stage: Stage };
 
 export function candidatesReducer(
@@ -58,18 +62,18 @@ export function candidatesReducer(
         ...state,
         archive: { kind: "idle" },
         candidates: state.candidates.filter((candidate) => candidate.id !== action.candidateId),
-        pane:
-          state.pane.kind === "open" && state.pane.candidateId === action.candidateId
-            ? { kind: "closed" }
-            : state.pane,
+        pane: closeCandidatePane(state.pane, action.candidateId),
       };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };
     case "paneClosed":
       return { ...state, pane: { kind: "closed" } };
+    case "stageChangeStateChanged":
+      return { ...state, stageChange: action.state };
     case "stageChanged":
       return {
         ...state,
+        stageChange: { kind: "idle" },
         candidates: state.candidates.map((item) =>
           item.id === action.candidateId ? { ...item, stage: action.stage } : item,
         ),
@@ -80,4 +84,10 @@ export function candidatesReducer(
       return exhaustive;
     }
   }
+}
+
+function closeCandidatePane(pane: PaneState, candidateId: string): PaneState {
+  if (pane.kind === "open" && pane.candidateId === candidateId) return { kind: "closed" };
+
+  return pane;
 }

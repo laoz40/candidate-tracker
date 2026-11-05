@@ -26,3 +26,14 @@ export async function archiveCandidate(id: string) {
 
   if (!response.ok) throw new Error("Could not archive candidate");
 }
+
+export async function changeCandidateStage(
+  id: string,
+  stage: InferRequestType<(typeof client.candidates)[":id"]["stage"]["$patch"]>["json"]["stage"],
+) {
+  const response = await client.candidates[":id"].stage.$patch({ param: { id }, json: { stage } });
+
+  if (!response.ok) throw new Error("Could not change stage");
+
+  return response.json();
+}

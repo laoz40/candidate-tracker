@@ -13,3 +13,7 @@ export const candidateInputSchema = z.object({
 export type CandidateInput = z.infer<typeof candidateInputSchema>;
 
 export const candidateIdSchema = z.object({ id: z.uuid() });
+
+export const candidateStageInputSchema = z.object({
+  stage: z.enum(["Applied", "Screening", "Interview", "Offer", "Rejected"]),
+});
