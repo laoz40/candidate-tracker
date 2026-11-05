@@ -16,6 +16,7 @@ export const candidateIdSchema = z.object({ id: z.uuid() });
 export const candidateNoteInputSchema = z.object({ text: z.string().trim().min(1) });
 
 export const candidateListSchema = z.object({
+  archived: z.enum(["true", "false"]).default("false"),
   stage: z.enum(["Applied", "Screening", "Interview", "Offer", "Rejected"]).optional(),
   role: z.string().trim().min(1).optional(),
   sort: z.enum(["newest", "oldest", "stage"]).default("newest"),

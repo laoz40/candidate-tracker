@@ -13,7 +13,7 @@ export function useCandidates(filters: CandidateFilters) {
     pane: { kind: "closed" },
   });
 
-  const { stage, role, sort } = filters;
+  const { stage, role, sort, archived } = filters;
   const { revision } = state;
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function useCandidates(filters: CandidateFilters) {
     dispatch({ type: "candidatesLoadStarted" });
 
     void listCandidates(
-      { stage: stage ?? undefined, role: role ?? undefined, sort },
+      { stage: stage ?? undefined, role: role ?? undefined, sort, archived },
       controller.signal,
     ).then(
       (candidates) => {
@@ -41,7 +41,7 @@ export function useCandidates(filters: CandidateFilters) {
     );
 
     return () => controller.abort();
-  }, [stage, role, sort, revision]);
+  }, [stage, role, sort, archived, revision]);
 
   async function archive(candidateId: string) {
     dispatch({ type: "candidateArchiveStarted", candidateId });

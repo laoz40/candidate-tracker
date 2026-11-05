@@ -10,6 +10,7 @@ export type ArchiveState =
 export type CandidateSort = "newest" | "oldest" | "stage";
 
 export type CandidateFilters = {
+  archived: "true" | "false";
   stage: Stage | null;
   role: string | null;
   sort: CandidateSort;

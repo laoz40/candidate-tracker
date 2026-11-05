@@ -12,6 +12,7 @@ import { stages } from "@/features/candidates/lib/candidates";
 import { cn } from "@/lib/utils";
 
 const candidateSearchSchema = z.object({
+  archived: z.enum(["true", "false"]).catch("false"),
   stage: z.enum(stages).optional().catch(undefined),
   role: z.string().trim().min(1).optional().catch(undefined),
   sort: z.enum(["newest", "oldest", "stage"]).catch("newest"),
@@ -25,7 +26,12 @@ export const Route = createFileRoute("/")({
 function CandidatesRoute() {
   const search = Route.useSearch();
 
-  const filters = { stage: search.stage ?? null, role: search.role ?? null, sort: search.sort };
+  const filters = {
+    stage: search.stage ?? null,
+    role: search.role ?? null,
+    sort: search.sort,
+    archived: search.archived,
+  };
 
   const { candidates, roles, selectedId, selected, dispatch, load, archiveState, archive } =
     useCandidates(filters);

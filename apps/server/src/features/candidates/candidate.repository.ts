@@ -12,7 +12,7 @@ export const candidateRepository = {
       .from(candidates)
       .where(
         and(
-          eq(candidates.archived, false),
+          eq(candidates.archived, query.archived === "true"),
           query.stage ? eq(candidates.stage, query.stage) : undefined,
           query.role ? eq(candidates.role, query.role) : undefined,
         ),

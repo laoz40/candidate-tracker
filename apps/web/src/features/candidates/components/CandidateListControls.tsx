@@ -31,6 +31,7 @@ export function CandidateListControls({
         stage: next.stage ?? undefined,
         role: next.role ?? undefined,
         sort: next.sort,
+        archived: next.archived,
       },
     });
   }
@@ -82,6 +83,25 @@ export function CandidateListControls({
                 {role}
               </SelectItem>
             ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <Select<CandidateFilters["archived"]>
+        value={filters.archived}
+        onValueChange={(archived) => {
+          if (archived !== null) changeFilters({ ...filters, archived });
+        }}
+        items={[
+          { value: "false", label: "Active candidates" },
+          { value: "true", label: "Archived candidates" },
+        ]}>
+        <SelectTrigger aria-label="Filter by archive status">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="false">Active candidates</SelectItem>
+            <SelectItem value="true">Archived candidates</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
