@@ -1,0 +1,17 @@
+name: candidate-tracker-e2e
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: candidate_tracker
+      POSTGRES_PASSWORD: candidate_tracker
+      POSTGRES_DB: candidate_tracker_test
+    ports:
+      - "127.0.0.1:55433:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U candidate_tracker -d candidate_tracker_test"]
+      interval: 1s
+      timeout: 5s
+      retries: 30

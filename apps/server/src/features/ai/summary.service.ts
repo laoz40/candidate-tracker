@@ -9,7 +9,7 @@ import { DOCUMENT_MIN_CHARACTERS, DOCUMENT_MAX_CHARACTERS } from "#documents/doc
 export const SUMMARY_TIMEOUT_MS = 60_000;
 export const SUMMARY_MAX_OUTPUT_TOKENS = 2_000;
 
-const openai = createOpenAI({ apiKey: env.OPENAI_API_KEY });
+const openai = createOpenAI({ apiKey: env.OPENAI_API_KEY, baseURL: env.OPENAI_BASE_URL });
 
 const modelConfig = {
   model: openai("gpt-6-luna"),
