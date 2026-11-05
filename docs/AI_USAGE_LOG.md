@@ -31,3 +31,11 @@ Code: `apps/server/src/app.ts` and `apps/server/src/features/candidates/`. Lint 
 I corrected the AI's use of separate `submitError` state in `use-candidate-note-form.ts`. I was familiar with TanStack Form and recognised that it already provides submission error handling. The updated code uses `formApi.setErrorMap`.
 
 In future, review AI code against the library's existing APIs, especially with newer libraries, to avoid unnecessary custom state or logic.
+
+## Reusing existing constants and functions
+
+When I asked AI to remove a separate constants file, it defined `DOCUMENT_MAX_CHARACTERS = 50_000` in both the document service and candidate validation schema. I corrected this to keep one exported definition and import it where needed.
+
+Duplicating a shared rule means remembering to update every copy. Missing one could make PDF extraction and candidate validation enforce different limits. This is a pattern I watch for in AI code: creating another constant or function instead of reusing what already exists.
+
+Code: `apps/server/src/features/documents/document.service.ts` and `apps/server/src/features/candidates/candidate.schema.ts`.
