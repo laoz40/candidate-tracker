@@ -1,3 +1,4 @@
+import type { StageMenuProps } from "@/features/candidates/components/StageMenu";
 import type { Dispatch } from "react";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import {
@@ -11,7 +12,7 @@ import {
 import { CandidateTableRow } from "@/features/candidates/components/CandidateTableRow";
 import type { Candidate } from "@/features/candidates/lib/candidates";
 
-type CandidateTableProps = {
+type CandidateTableProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidates: Candidate[];
   filtered: boolean;
   selectedId: string | null;
@@ -23,6 +24,8 @@ export function CandidateTable({
   filtered,
   selectedId,
   dispatch,
+  stageChangeState,
+  onStageChange,
 }: CandidateTableProps) {
   return (
     <Table aria-label="Candidates">
@@ -55,6 +58,8 @@ export function CandidateTable({
             candidate={candidate}
             isSelected={selectedId === candidate.id}
             dispatch={dispatch}
+            stageChangeState={stageChangeState}
+            onStageChange={onStageChange}
           />
         ))}
       </TableBody>

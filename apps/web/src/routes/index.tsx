@@ -27,8 +27,18 @@ function CandidatesRoute() {
 
   const filters = { stage: search.stage ?? null, role: search.role ?? null, sort: search.sort };
 
-  const { candidates, roles, selectedId, selected, dispatch, load, archiveState, archive } =
-    useCandidates(filters);
+  const {
+    candidates,
+    roles,
+    selectedId,
+    selected,
+    dispatch,
+    load,
+    archiveState,
+    archive,
+    stageChangeState,
+    changeStage,
+  } = useCandidates(filters);
 
   return (
     <SidebarProvider>
@@ -62,6 +72,8 @@ function CandidatesRoute() {
                 candidates={candidates}
                 filtered={filters.stage !== null || filters.role !== null}
                 selectedId={selectedId}
+                stageChangeState={stageChangeState}
+                onStageChange={changeStage}
                 dispatch={dispatch}
               />
             ) : null}
@@ -70,6 +82,8 @@ function CandidatesRoute() {
             <CandidateSidePane
               candidate={selected}
               archiveState={archiveState}
+              stageChangeState={stageChangeState}
+              onStageChange={changeStage}
               onArchive={archive}
               dispatch={dispatch}
             />

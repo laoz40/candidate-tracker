@@ -15,8 +15,11 @@ export type CandidateFilters = {
   sort: CandidateSort;
 };
 
+export type StageChangeState = ArchiveState;
+
 export type CandidatesState = {
   revision: number;
+  stageChange: StageChangeState;
   archive: ArchiveState;
   candidates: Candidate[];
   pane: PaneState;
@@ -34,6 +37,7 @@ export type CandidatesAction =
   | { type: "noteAdded"; candidateId: string; note: Candidate["notes"][number] }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
+  | { type: "stageChangeStateChanged"; state: StageChangeState }
   | { type: "stageChanged"; candidateId: string; stage: Stage };
 
 function closeArchivedPane(pane: PaneState, candidateId: string): PaneState {
@@ -43,6 +47,15 @@ function closeArchivedPane(pane: PaneState, candidateId: string): PaneState {
 export function candidatesReducer(
   state: CandidatesState,
   action: CandidatesAction,
+): CandidatesState {
+  if (action.type === "stageChangeStateChanged") return { ...state, stageChange: action.state };
+
+  return reduceCandidateData(state, action);
+}
+
+function reduceCandidateData(
+  state: CandidatesState,
+  action: Exclude<CandidatesAction, { type: "stageChangeStateChanged" }>,
 ): CandidatesState {
   switch (action.type) {
     case "candidatesLoadStarted":
@@ -86,6 +99,8 @@ export function candidatesReducer(
     case "stageChanged":
       return {
         ...state,
+        stageChange: { kind: "idle" },
+        revision: state.revision + 1,
         candidates: state.candidates.map((item) =>
           item.id === action.candidateId ? { ...item, stage: action.stage } : item,
         ),

@@ -39,3 +39,14 @@ export async function saveCandidateNote(candidateId: string, text: string) {
 
   return response.json();
 }
+
+export async function changeCandidateStage(
+  id: string,
+  stage: InferRequestType<(typeof client.candidates)[":id"]["stage"]["$patch"]>["json"]["stage"],
+) {
+  const response = await client.candidates[":id"].stage.$patch({ param: { id }, json: { stage } });
+
+  if (!response.ok) throw new Error("Could not change stage");
+
+  return response.json();
+}

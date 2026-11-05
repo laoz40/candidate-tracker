@@ -5,6 +5,7 @@ import {
   candidateInputSchema,
   candidateNoteInputSchema,
   candidateListSchema,
+  candidateStageInputSchema,
 } from "#candidates/candidate.schema";
 import { candidateService } from "#candidates/candidate.service";
 
@@ -20,6 +21,20 @@ export const candidateRoutes = new Hono()
   .get("/", zValidator("query", candidateListSchema), async (c) => {
     return c.json(await candidateService.list(c.req.valid("query")));
   })
+  .patch(
+    "/:id/stage",
+    zValidator("param", candidateIdSchema),
+    zValidator("json", candidateStageInputSchema),
+    async (c) => {
+      const { id } = c.req.valid("param");
+      const { stage } = c.req.valid("json");
+      const candidate = await candidateService.changeStage(id, stage);
+
+      if (!candidate) return c.json({ error: "Candidate not found" }, 404);
+
+      return c.json(candidate);
+    },
+  )
   .post("/:id/archive", zValidator("param", candidateIdSchema), async (c) => {
     const { id } = c.req.valid("param");
     const candidate = await candidateService.archive(id);

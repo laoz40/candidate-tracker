@@ -1,7 +1,7 @@
 import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { db } from "#db";
 import { candidateNotes, candidates } from "#schema";
-import type { CandidateInsert } from "#candidates/candidate.service";
+import type { CandidateInsert, CandidateStage } from "#candidates/candidate.service";
 
 import type { CandidateListQuery } from "#candidates/candidate.schema";
 
@@ -18,6 +18,16 @@ export const candidateRepository = {
         ),
       )
       .orderBy(...candidateOrder(query.sort));
+  },
+
+  changeStage: async (id: string, stage: CandidateStage) => {
+    const [candidate] = await db
+      .update(candidates)
+      .set({ stage })
+      .where(eq(candidates.id, id))
+      .returning({ id: candidates.id, stage: candidates.stage });
+
+    return candidate;
   },
 
   archive: async (id: string) => {

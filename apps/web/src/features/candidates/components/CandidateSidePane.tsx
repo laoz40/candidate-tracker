@@ -1,3 +1,4 @@
+import type { StageMenuProps } from "@/features/candidates/components/StageMenu";
 import type { Dispatch } from "react";
 import type { ArchiveState, CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import { ArchiveCandidateButton } from "@/features/candidates/components/ArchiveCandidateButton";
@@ -8,7 +9,7 @@ import { CandidateResume } from "@/features/candidates/components/CandidateResum
 import { Separator } from "@/components/ui/separator";
 import type { Candidate } from "@/features/candidates/lib/candidates";
 
-type CandidateSidePaneProps = {
+type CandidateSidePaneProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Candidate;
   archiveState: ArchiveState;
   onArchive: (candidateId: string) => Promise<void>;
@@ -20,6 +21,8 @@ export function CandidateSidePane({
   dispatch,
   archiveState,
   onArchive,
+  stageChangeState,
+  onStageChange,
 }: CandidateSidePaneProps) {
   return (
     <section
@@ -30,6 +33,8 @@ export function CandidateSidePane({
         <CandidatePaneHeader
           candidate={candidate}
           dispatch={dispatch}
+          stageChangeState={stageChangeState}
+          onStageChange={onStageChange}
         />
         <CandidateProfileFields candidate={candidate} />
         <Separator />

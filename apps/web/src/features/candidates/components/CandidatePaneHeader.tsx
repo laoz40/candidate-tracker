@@ -1,3 +1,4 @@
+import type { StageMenuProps } from "@/features/candidates/components/StageMenu";
 import type { Dispatch } from "react";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import { RiCloseLine } from "@remixicon/react";
@@ -6,12 +7,17 @@ import { Button } from "@/components/ui/button";
 import { StageBadge, StageMenu } from "@/features/candidates/components/StageMenu";
 import { initials, type Candidate } from "@/features/candidates/lib/candidates";
 
-type CandidatePaneHeaderProps = {
+type CandidatePaneHeaderProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Pick<Candidate, "id" | "name" | "role" | "stage">;
   dispatch: Dispatch<CandidatesAction>;
 };
 
-export function CandidatePaneHeader({ candidate, dispatch }: CandidatePaneHeaderProps) {
+export function CandidatePaneHeader({
+  candidate,
+  dispatch,
+  stageChangeState,
+  onStageChange,
+}: CandidatePaneHeaderProps) {
   return (
     <>
       <div className="flex items-center gap-3">
@@ -38,7 +44,8 @@ export function CandidatePaneHeader({ candidate, dispatch }: CandidatePaneHeader
         <StageBadge stage={candidate.stage} />
         <StageMenu
           candidate={candidate}
-          dispatch={dispatch}
+          stageChangeState={stageChangeState}
+          onStageChange={onStageChange}
         />
       </div>
     </>

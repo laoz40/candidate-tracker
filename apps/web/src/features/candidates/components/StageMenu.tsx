@@ -1,7 +1,7 @@
-import type { Dispatch } from "react";
-import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import type { StageChangeState } from "@/features/candidates/lib/candidates-reducer";
 import {
   RiArrowDownSLine,
+  RiLoader4Line,
   RiCircleLine,
   RiSearchLine,
   RiDiscussLine,
@@ -38,39 +38,56 @@ export function StageBadge({ stage }: { stage: Stage }) {
   );
 }
 
-type StageMenuProps = {
+export type StageMenuProps = {
   candidate: Pick<Candidate, "id" | "name" | "stage">;
-  dispatch: Dispatch<CandidatesAction>;
+  stageChangeState: StageChangeState;
+  onStageChange: (candidateId: string, stage: Stage) => Promise<void>;
 };
 
-export function StageMenu({ candidate, dispatch }: StageMenuProps) {
+export function StageMenu({ candidate, stageChangeState, onStageChange }: StageMenuProps) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="outline"
-            size="sm"
-            aria-label={`Change stage for ${candidate.name}`}
-          />
-        }>
-        Change stage <RiArrowDownSLine data-icon="inline-end" />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          {stages.map((option) => (
-            <DropdownMenuItem
-              key={option}
-              disabled={option === candidate.stage}
-              onClick={() =>
-                dispatch({ type: "stageChanged", candidateId: candidate.id, stage: option })
-              }>
-              {option}
-              {option === candidate.stage ? " (current)" : ""}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex flex-col items-end gap-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              disabled={stageChangeState.kind === "saving"}
+              variant="outline"
+              size="sm"
+              aria-label={`Change stage for ${candidate.name}`}
+            />
+          }>
+          {stageChangeState.kind === "saving" && stageChangeState.candidateId === candidate.id ? (
+            <>
+              <RiLoader4Line
+                data-icon="inline-start"
+                className="animate-spin"
+              />
+              Saving
+            </>
+          ) : (
+            <>
+              Change stage <RiArrowDownSLine data-icon="inline-end" />
+            </>
+          )}
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            {stages.map((option) => (
+              <DropdownMenuItem
+                key={option}
+                disabled={option === candidate.stage || stageChangeState.kind === "saving"}
+                onClick={() => void onStageChange(candidate.id, option)}>
+                {option}
+                {option === candidate.stage ? " (current)" : ""}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {stageChangeState.kind === "error" && stageChangeState.candidateId === candidate.id ? (
+        <p role="alert">Could not change stage. Please try again.</p>
+      ) : null}
+    </div>
   );
 }

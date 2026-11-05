@@ -22,3 +22,7 @@ export const candidateListSchema = z.object({
 });
 
 export type CandidateListQuery = z.infer<typeof candidateListSchema>;
+
+export const candidateStageInputSchema = z.object({
+  stage: z.enum(["Applied", "Screening", "Interview", "Offer", "Rejected"]),
+});

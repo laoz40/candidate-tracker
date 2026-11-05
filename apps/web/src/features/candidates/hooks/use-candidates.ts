@@ -1,13 +1,19 @@
 import { activeRoles } from "@/features/candidates/lib/candidate-form";
 import type { CandidateFilters } from "@/features/candidates/lib/candidates-reducer";
+import type { Stage } from "@/features/candidates/lib/candidates";
 import { useEffect, useReducer } from "react";
-import { archiveCandidate, listCandidates } from "@/features/candidates/lib/candidates-api";
+import {
+  archiveCandidate,
+  changeCandidateStage,
+  listCandidates,
+} from "@/features/candidates/lib/candidates-api";
 import { candidatesReducer } from "@/features/candidates/lib/candidates-reducer";
 
 export function useCandidates(filters: CandidateFilters) {
   const [state, dispatch] = useReducer(candidatesReducer, {
     candidates: [],
     revision: 0,
+    stageChange: { kind: "idle" },
     archive: { kind: "idle" },
     load: { kind: "loading" },
     pane: { kind: "closed" },
@@ -54,6 +60,17 @@ export function useCandidates(filters: CandidateFilters) {
     }
   }
 
+  async function changeStage(candidateId: string, nextStage: Stage) {
+    dispatch({ type: "stageChangeStateChanged", state: { kind: "saving", candidateId } });
+
+    try {
+      const saved = await changeCandidateStage(candidateId, nextStage);
+      dispatch({ type: "stageChanged", candidateId: saved.id, stage: saved.stage });
+    } catch {
+      dispatch({ type: "stageChangeStateChanged", state: { kind: "error", candidateId } });
+    }
+  }
+
   const selectedId = state.pane.kind === "open" ? state.pane.candidateId : null;
   const selected = state.candidates.find((candidate) => candidate.id === selectedId);
 
@@ -64,6 +81,8 @@ export function useCandidates(filters: CandidateFilters) {
     selectedId,
     selected,
     dispatch,
+    stageChangeState: state.stageChange,
+    changeStage,
     archiveState: state.archive,
     archive,
   };
