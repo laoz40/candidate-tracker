@@ -1,0 +1,2 @@
+export const DOCUMENT_MIN_CHARACTERS = 100;
+export const DOCUMENT_MAX_CHARACTERS = 50_000;

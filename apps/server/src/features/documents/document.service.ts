@@ -1,6 +1,6 @@
 import { PasswordException, PDFParse } from "pdf-parse";
 
-export const DOCUMENT_MAX_CHARACTERS = 50_000;
+import { DOCUMENT_MAX_CHARACTERS } from "#documents/document-limits";
 
 type ExtractionResult = { text: string } | { error: string };
 

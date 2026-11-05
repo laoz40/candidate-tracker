@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DOCUMENT_MAX_CHARACTERS } from "#documents/document.service";
+import { DOCUMENT_MIN_CHARACTERS, DOCUMENT_MAX_CHARACTERS } from "#documents/document-limits";
 
 export const candidateInputSchema = z.object({
   name: z.string().trim().min(1),
@@ -7,7 +7,14 @@ export const candidateInputSchema = z.object({
   phone: z.string().trim(),
   role: z.enum(["Frontend Engineer", "Full Stack Engineer", "Product Designer"]),
   source: z.string().trim(),
-  resume: z.string().trim().min(1).max(DOCUMENT_MAX_CHARACTERS),
+  resume: z
+    .string()
+    .trim()
+    .min(
+      DOCUMENT_MIN_CHARACTERS,
+      `Provide at least ${DOCUMENT_MIN_CHARACTERS} characters of resume or cover letter text.`,
+    )
+    .max(DOCUMENT_MAX_CHARACTERS),
   note: z.string().trim(),
 });
 

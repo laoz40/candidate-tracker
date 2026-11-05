@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DOCUMENT_MIN_CHARACTERS } from "@candidate-tracker/server/document-limits";
 import type { Candidate } from "@/features/candidates/lib/candidates";
 
 export const activeRoles = [
@@ -13,7 +14,13 @@ export const candidateFormSchema = z.object({
   phone: z.string().trim(),
   role: z.enum(activeRoles, { error: "Select a role." }),
   source: z.string().trim(),
-  resume: z.string().trim().min(1, "Paste resume or cover letter text, or upload a PDF."),
+  resume: z
+    .string()
+    .trim()
+    .min(
+      DOCUMENT_MIN_CHARACTERS,
+      `Provide at least ${DOCUMENT_MIN_CHARACTERS} characters of resume or cover letter text.`,
+    ),
   note: z.string().trim(),
 });
 

@@ -40,6 +40,11 @@
     }
   },
   "exports": {
+    "./document-limits": {
+      "types": "./src/features/documents/document-limits.ts",
+      "development": "./src/features/documents/document-limits.ts",
+      "default": "./dist/features/documents/document-limits.js"
+    },
     ".": {
       "types": "./src/app.ts"
     }
