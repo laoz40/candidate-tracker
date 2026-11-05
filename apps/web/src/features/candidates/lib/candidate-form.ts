@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { DOCUMENT_MIN_CHARACTERS } from "@candidate-tracker/server/document-limits";
-import type { Candidate } from "@/features/candidates/lib/candidates";
 
 export const activeRoles = [
   "Frontend Engineer",
@@ -33,23 +32,3 @@ export const emptyCandidateForm = {
   resume: "",
   note: "",
 };
-
-export function createCandidate(value: z.infer<typeof candidateFormSchema>): Candidate {
-  const now = new Date();
-
-  return {
-    id: crypto.randomUUID(),
-    name: value.name,
-    email: value.email,
-    phone: value.phone || null,
-    role: value.role,
-    source: value.source || null,
-    resume: value.resume,
-    summary: null,
-    stage: "Applied",
-    date: now.toISOString(),
-    notes: value.note
-      ? [{ id: crypto.randomUUID(), date: now.toISOString(), text: value.note }]
-      : [],
-  };
-}
