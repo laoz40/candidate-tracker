@@ -27,6 +27,11 @@
       "types": "./src/features/candidates/*.ts",
       "development": "./src/features/candidates/*.ts",
       "default": "./dist/features/candidates/*.js"
+    },
+    "#documents/*": {
+      "types": "./src/features/documents/*.ts",
+      "development": "./src/features/documents/*.ts",
+      "default": "./dist/features/documents/*.js"
     }
   },
   "exports": {
@@ -49,6 +54,7 @@
     "dotenv": "^18.0.9",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.16",
+    "pdf-parse": "^2.4.5",
     "pg": "^8.23.1",
     "zod": "^4.6.7"
   },
