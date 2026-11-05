@@ -9,10 +9,8 @@ import { candidatesReducer } from "@/features/candidates/lib/candidates-reducer"
 
 export function useCandidates() {
   const [state, dispatch] = useReducer(candidatesReducer, {
-    candidates: [],
-    stageChange: { kind: "idle" },
-    archive: { kind: "idle" },
-    load: { kind: "loading" },
+    list: { candidates: [], load: { kind: "loading" } },
+    mutations: { stageChange: { kind: "idle" }, archive: { kind: "idle" } },
     pane: { kind: "closed" },
   });
 
@@ -46,28 +44,28 @@ export function useCandidates() {
   }
 
   async function changeStage(candidateId: string, stage: Stage) {
-    dispatch({ type: "stageChangeStateChanged", state: { kind: "saving", candidateId } });
+    dispatch({ type: "stageChangeStarted", candidateId });
 
     try {
       const saved = await changeCandidateStage(candidateId, stage);
       dispatch({ type: "stageChanged", candidateId: saved.id, stage: saved.stage });
     } catch {
-      dispatch({ type: "stageChangeStateChanged", state: { kind: "error", candidateId } });
+      dispatch({ type: "stageChangeFailed", candidateId });
     }
   }
 
   const selectedId = state.pane.kind === "open" ? state.pane.candidateId : null;
-  const selected = state.candidates.find((candidate) => candidate.id === selectedId);
+  const selected = state.list.candidates.find((candidate) => candidate.id === selectedId);
 
   return {
-    candidates: state.candidates,
-    load: state.load,
+    candidates: state.list.candidates,
+    load: state.list.load,
     selectedId,
     selected,
     dispatch,
-    stageChangeState: state.stageChange,
+    stageChangeState: state.mutations.stageChange,
     changeStage,
-    archiveState: state.archive,
+    archiveState: state.mutations.archive,
     archive,
   };
 }

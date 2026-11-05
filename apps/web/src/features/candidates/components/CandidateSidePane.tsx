@@ -1,6 +1,7 @@
 import type { StageMenuProps } from "@/features/candidates/components/StageMenu";
 import type { Dispatch } from "react";
-import type { ArchiveState, CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import type { CandidateMutationStatus } from "@/features/candidates/lib/candidate-mutation-reducer";
+import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import { ArchiveCandidateButton } from "@/features/candidates/components/ArchiveCandidateButton";
 import { CandidateNotes } from "@/features/candidates/components/CandidateNotes";
 import { CandidatePaneHeader } from "@/features/candidates/components/CandidatePaneHeader";
@@ -11,9 +12,9 @@ import type { Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateSidePaneProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Candidate;
-  archiveState: ArchiveState;
+  archiveState: CandidateMutationStatus;
   onArchive: (candidateId: string) => Promise<void>;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "paneClosed" }>>;
 };
 
 export function CandidateSidePane({

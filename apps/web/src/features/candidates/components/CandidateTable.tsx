@@ -15,7 +15,7 @@ import type { Candidate } from "@/features/candidates/lib/candidates";
 type CandidateTableProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidates: Candidate[];
   selectedId: string | null;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateSelected" }>>;
 };
 
 export function CandidateTable({

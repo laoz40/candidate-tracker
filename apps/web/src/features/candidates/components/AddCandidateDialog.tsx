@@ -44,7 +44,11 @@ const contactFields = [
   },
 ] as const;
 
-export function AddCandidateDialog({ dispatch }: { dispatch: Dispatch<CandidatesAction> }) {
+export function AddCandidateDialog({
+  dispatch,
+}: {
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -76,7 +80,7 @@ function AddCandidateForm({
   dispatch,
   onCreated,
 }: {
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
   onCreated: () => void;
 }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
