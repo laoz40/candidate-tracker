@@ -26,3 +26,14 @@ export async function archiveCandidate(id: string) {
 
   if (!response.ok) throw new Error("Could not archive candidate");
 }
+
+export async function saveCandidateNote(candidateId: string, text: string) {
+  const response = await client.candidates[":id"].notes.$post({
+    param: { id: candidateId },
+    json: { text },
+  });
+
+  if (!response.ok) throw new Error("Could not save note");
+
+  return response.json();
+}

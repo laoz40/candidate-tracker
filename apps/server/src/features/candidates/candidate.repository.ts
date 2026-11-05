@@ -30,6 +30,23 @@ export const candidateRepository = {
       .orderBy(asc(candidateNotes.date), asc(candidateNotes.id));
   },
 
+  findById: async (id: string) => {
+    const [candidate] = await db
+      .select({ id: candidates.id })
+      .from(candidates)
+      .where(eq(candidates.id, id));
+
+    return candidate;
+  },
+
+  addNote: async (candidateId: string, text: string) => {
+    const [note] = await db.insert(candidateNotes).values({ candidateId, text }).returning();
+
+    if (!note) throw new Error("Note insert returned no row");
+
+    return note;
+  },
+
   create: async (input: CandidateInsert) => {
     return db.transaction(async (tx) => {
       const [candidate] = await tx

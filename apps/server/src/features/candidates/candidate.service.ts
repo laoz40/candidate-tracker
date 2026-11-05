@@ -48,6 +48,16 @@ function toCandidateResponse(
 }
 
 export const candidateService = {
+  addNote: async (candidateId: string, text: string) => {
+    const candidate = await candidateRepository.findById(candidateId);
+
+    if (!candidate) return undefined;
+
+    const note = await candidateRepository.addNote(candidateId, text);
+
+    return { id: note.id, date: note.date.toISOString(), text: note.text };
+  },
+
   list: async (): Promise<CandidateResponse[]> => {
     const candidates = await candidateRepository.list();
     const candidateIds = candidates.map((candidate) => candidate.id);

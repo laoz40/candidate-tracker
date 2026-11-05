@@ -25,3 +25,9 @@ I wanted high-level code that clearly expressed the application logic, with impl
 I then added two lint rules to enforce this structure. `no-backend-layer-imports` blocks imports that cross the intended boundaries, such as handlers accessing the repository directly or services importing database code. `focused-repository-operations` flags repository functions that combine independent database operations, while allowing writes that must succeed together in a transaction. These checks catch the patterns automatically instead of relying on repeated instructions to agents.
 
 Code: `apps/server/src/app.ts` and `apps/server/src/features/candidates/`. Lint rules: `tools/oxlint/project.mjs` and `.oxlintrc.json`.
+
+### Reuse TanStack Form's error handling
+
+I corrected the AI's use of separate `submitError` state in `use-candidate-note-form.ts`. I was familiar with TanStack Form and recognised that it already provides submission error handling. The updated code uses `formApi.setErrorMap`.
+
+In future, review AI code against the library's existing APIs, especially with newer libraries, to avoid unnecessary custom state or logic.

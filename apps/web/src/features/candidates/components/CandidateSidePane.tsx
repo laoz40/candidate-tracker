@@ -35,7 +35,10 @@ export function CandidateSidePane({
         <Separator />
         <CandidateResume candidate={candidate} />
         <Separator />
-        <CandidateNotes candidate={candidate} />
+        <CandidateNotes
+          candidate={candidate}
+          dispatch={dispatch}
+        />
         <Separator />
         <ArchiveCandidateButton
           candidateId={candidate.id}

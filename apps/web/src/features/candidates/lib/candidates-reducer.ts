@@ -21,9 +21,14 @@ export type CandidatesAction =
   | { type: "candidateArchiveStarted"; candidateId: string }
   | { type: "candidateArchiveFailed"; candidateId: string }
   | { type: "candidateArchived"; candidateId: string }
+  | { type: "noteAdded"; candidateId: string; note: Candidate["notes"][number] }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
   | { type: "stageChanged"; candidateId: string; stage: Stage };
+
+function closeArchivedPane(pane: PaneState, candidateId: string): PaneState {
+  return pane.kind === "open" && pane.candidateId === candidateId ? { kind: "closed" } : pane;
+}
 
 export function candidatesReducer(
   state: CandidatesState,
@@ -58,10 +63,16 @@ export function candidatesReducer(
         ...state,
         archive: { kind: "idle" },
         candidates: state.candidates.filter((candidate) => candidate.id !== action.candidateId),
-        pane:
-          state.pane.kind === "open" && state.pane.candidateId === action.candidateId
-            ? { kind: "closed" }
-            : state.pane,
+        pane: closeArchivedPane(state.pane, action.candidateId),
+      };
+    case "noteAdded":
+      return {
+        ...state,
+        candidates: state.candidates.map((candidate) =>
+          candidate.id === action.candidateId
+            ? { ...candidate, notes: [...candidate.notes, action.note] }
+            : candidate,
+        ),
       };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };
