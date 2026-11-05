@@ -1,6 +1,13 @@
 import type { Dispatch } from "react";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
-import { Table, TableHeader, TableBody, TableRow, TableHead } from "@/components/ui/table";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/ui/table";
 import { CandidateTableRow } from "@/features/candidates/components/CandidateTableRow";
 import type { Candidate } from "@/features/candidates/lib/candidates";
 
@@ -25,6 +32,15 @@ export function CandidateTable({ candidates, selectedId, dispatch }: CandidateTa
         </TableRow>
       </TableHeader>
       <TableBody>
+        {candidates.length === 0 ? (
+          <TableRow>
+            <TableCell
+              colSpan={5}
+              className="text-center">
+              No candidates yet. Add a candidate to get started.
+            </TableCell>
+          </TableRow>
+        ) : null}
         {candidates.map((candidate) => (
           <CandidateTableRow
             key={candidate.id}

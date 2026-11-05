@@ -1,6 +1,6 @@
 import { useState, type Dispatch } from "react";
 import { useForm } from "@tanstack/react-form";
-import { RiAddLine } from "@remixicon/react";
+import { RiAddLine, RiLoader4Line } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,9 +26,9 @@ import { ResumeUploadButton } from "@/features/candidates/components/ResumeUploa
 import {
   activeRoles,
   candidateFormSchema,
-  createCandidate,
   emptyCandidateForm,
 } from "@/features/candidates/lib/candidate-form";
+import { saveCandidate } from "@/features/candidates/lib/candidates-api";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 
 const contactFields = [
@@ -78,15 +78,22 @@ function AddCandidateForm({
   dispatch: Dispatch<CandidatesAction>;
   onCreated: () => void;
 }) {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const form = useForm({
     defaultValues: emptyCandidateForm,
     validators: { onBlur: candidateFormSchema, onSubmit: candidateFormSchema },
-    onSubmit: ({ value }) => {
-      dispatch({
-        type: "candidateCreated",
-        candidate: createCandidate(candidateFormSchema.parse(value)),
-      });
-      onCreated();
+    onSubmit: async ({ value }) => {
+      setSubmitError(null);
+
+      try {
+        const candidate = await saveCandidate(value);
+
+        dispatch({ type: "candidateCreated", candidate });
+        onCreated();
+      } catch {
+        setSubmitError("Could not save candidate. Please try again.");
+      }
     },
   });
 
@@ -228,6 +235,7 @@ function AddCandidateForm({
           )}
         </form.Field>
       </FieldGroup>
+      {submitError ? <p role="alert">{submitError}</p> : null}
       <DialogFooter>
         <DialogClose
           render={
@@ -238,7 +246,21 @@ function AddCandidateForm({
           }>
           Cancel
         </DialogClose>
-        <Button type="submit">Add candidate</Button>
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <Button
+              type="submit"
+              disabled={isSubmitting}>
+              {isSubmitting ? (
+                <RiLoader4Line
+                  data-icon="inline-start"
+                  className="animate-spin"
+                />
+              ) : null}
+              {isSubmitting ? "Saving" : "Add candidate"}
+            </Button>
+          )}
+        </form.Subscribe>
       </DialogFooter>
     </form>
   );

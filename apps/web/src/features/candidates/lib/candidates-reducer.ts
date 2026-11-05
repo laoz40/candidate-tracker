@@ -5,9 +5,12 @@ type PaneState = { kind: "closed" } | { kind: "open"; candidateId: string };
 export type CandidatesState = {
   candidates: Candidate[];
   pane: PaneState;
+  load: { kind: "loading" } | { kind: "ready" } | { kind: "error"; message: string };
 };
 
 export type CandidatesAction =
+  | { type: "candidatesLoaded"; candidates: Candidate[] }
+  | { type: "candidatesLoadFailed"; message: string }
   | { type: "candidateCreated"; candidate: Candidate }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
@@ -18,6 +21,19 @@ export function candidatesReducer(
   action: CandidatesAction,
 ): CandidatesState {
   switch (action.type) {
+    case "candidatesLoaded":
+      return {
+        ...state,
+        candidates: [
+          ...state.candidates,
+          ...action.candidates.filter(
+            (candidate) => !state.candidates.some((existing) => existing.id === candidate.id),
+          ),
+        ],
+        load: { kind: "ready" },
+      };
+    case "candidatesLoadFailed":
+      return { ...state, load: { kind: "error", message: action.message } };
     case "candidateCreated":
       return {
         ...state,
