@@ -1,15 +1,23 @@
-import { asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
 import { db } from "#db";
 import { candidateNotes, candidates } from "#schema";
 import type { CandidateInsert } from "#candidates/candidate.service";
 
+import type { CandidateListQuery } from "#candidates/candidate.schema";
+
 export const candidateRepository = {
-  list: async () => {
+  list: async (query: CandidateListQuery) => {
     return db
       .select()
       .from(candidates)
-      .where(eq(candidates.archived, false))
-      .orderBy(desc(candidates.date), desc(candidates.id));
+      .where(
+        and(
+          eq(candidates.archived, false),
+          query.stage ? eq(candidates.stage, query.stage) : undefined,
+          query.role ? eq(candidates.role, query.role) : undefined,
+        ),
+      )
+      .orderBy(...candidateOrder(query.sort));
   },
 
   archive: async (id: string) => {
@@ -76,3 +84,11 @@ export const candidateRepository = {
     });
   },
 };
+
+function candidateOrder(sort: CandidateListQuery["sort"]) {
+  if (sort === "stage") return [asc(candidates.stage), desc(candidates.date), desc(candidates.id)];
+
+  if (sort === "oldest") return [asc(candidates.date), asc(candidates.id)];
+
+  return [desc(candidates.date), desc(candidates.id)];
+}
