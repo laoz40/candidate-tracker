@@ -1,4 +1,4 @@
-import type { StageChangeState } from "@/features/candidates/lib/candidates-reducer";
+import type { CandidateMutationStatus } from "@/features/candidates/lib/candidate-mutation-reducer";
 import {
   RiArrowDownSLine,
   RiLoader4Line,
@@ -40,7 +40,7 @@ export function StageBadge({ stage }: { stage: Stage }) {
 
 export type StageMenuProps = {
   candidate: Pick<Candidate, "id" | "name" | "stage">;
-  stageChangeState: StageChangeState;
+  stageChangeState: CandidateMutationStatus;
   onStageChange: (candidateId: string, stage: Stage) => Promise<void>;
 };
 

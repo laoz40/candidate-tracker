@@ -9,7 +9,7 @@ import { initials, formatDate, type Candidate } from "@/features/candidates/lib/
 type CandidateTableRowProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Candidate;
   isSelected: boolean;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateSelected" }>>;
 };
 
 export function CandidateTableRow({

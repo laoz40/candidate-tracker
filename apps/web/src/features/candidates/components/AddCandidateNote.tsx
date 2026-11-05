@@ -9,7 +9,7 @@ import type { CandidatesAction } from "@/features/candidates/lib/candidates-redu
 type AddCandidateNoteProps = {
   candidateId: string;
   onClose: () => void;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "noteAdded" }>>;
 };
 
 export function AddCandidateNote({ candidateId, dispatch, onClose }: AddCandidateNoteProps) {

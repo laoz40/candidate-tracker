@@ -9,7 +9,7 @@ export function CandidatesHeader({
   dispatch,
 }: {
   count: number;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateCreated" }>>;
 }) {
   return (
     <header className="flex min-h-20 shrink-0 flex-wrap items-center gap-3 px-6 py-4">

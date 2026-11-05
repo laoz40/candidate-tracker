@@ -10,7 +10,7 @@ const noteFormSchema = z.object({
 
 export function useCandidateNoteForm(
   candidateId: string,
-  dispatch: Dispatch<CandidatesAction>,
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "noteAdded" }>>,
   onSaved: () => void,
 ) {
   const form = useForm({

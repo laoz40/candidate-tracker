@@ -6,7 +6,7 @@ import { RiChat3Line } from "@remixicon/react";
 import { type Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateNotesProps = {
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "noteAdded" }>>;
   candidate: Pick<Candidate, "id" | "notes">;
 };
 

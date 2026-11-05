@@ -9,7 +9,7 @@ import { initials, type Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidatePaneHeaderProps = Pick<StageMenuProps, "stageChangeState" | "onStageChange"> & {
   candidate: Pick<Candidate, "id" | "name" | "role" | "stage">;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "paneClosed" }>>;
 };
 
 export function CandidatePaneHeader({

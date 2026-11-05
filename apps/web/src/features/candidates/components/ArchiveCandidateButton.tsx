@@ -1,6 +1,6 @@
 import { RiArchiveLine, RiLoader4Line } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
-import type { ArchiveState } from "@/features/candidates/lib/candidates-reducer";
+import type { CandidateMutationStatus } from "@/features/candidates/lib/candidate-mutation-reducer";
 
 export function ArchiveCandidateButton({
   candidateId,
@@ -8,7 +8,7 @@ export function ArchiveCandidateButton({
   onArchive,
 }: {
   candidateId: string;
-  state: ArchiveState;
+  state: CandidateMutationStatus;
   onArchive: (candidateId: string) => Promise<void>;
 }) {
   return (

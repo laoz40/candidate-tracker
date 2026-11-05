@@ -16,7 +16,7 @@ type CandidateTableProps = Pick<StageMenuProps, "stageChangeState" | "onStageCha
   candidates: Candidate[];
   filtered: boolean;
   selectedId: string | null;
-  dispatch: Dispatch<CandidatesAction>;
+  dispatch: Dispatch<Extract<CandidatesAction, { type: "candidateSelected" }>>;
 };
 
 export function CandidateTable({
