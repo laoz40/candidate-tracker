@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({ component: CandidatesRoute });
 
 function CandidatesRoute() {
-  const { candidates, selectedId, selected, dispatch, load } = useCandidates();
+  const { candidates, selectedId, selected, dispatch, load, archiveState, archive } =
+    useCandidates();
 
   return (
     <SidebarProvider>
@@ -47,6 +48,8 @@ function CandidatesRoute() {
           {selected ? (
             <CandidateSidePane
               candidate={selected}
+              archiveState={archiveState}
+              onArchive={archive}
               dispatch={dispatch}
             />
           ) : null}

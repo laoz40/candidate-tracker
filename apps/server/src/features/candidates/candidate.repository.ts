@@ -1,11 +1,25 @@
-import { asc, desc, inArray } from "drizzle-orm";
+import { asc, desc, eq, inArray } from "drizzle-orm";
 import { db } from "#db";
 import { candidateNotes, candidates } from "#schema";
 import type { CandidateInsert } from "#candidates/candidate.service";
 
 export const candidateRepository = {
   list: async () => {
-    return db.select().from(candidates).orderBy(desc(candidates.date), desc(candidates.id));
+    return db
+      .select()
+      .from(candidates)
+      .where(eq(candidates.archived, false))
+      .orderBy(desc(candidates.date), desc(candidates.id));
+  },
+
+  archive: async (id: string) => {
+    const [candidate] = await db
+      .update(candidates)
+      .set({ archived: true })
+      .where(eq(candidates.id, id))
+      .returning({ id: candidates.id });
+
+    return candidate;
   },
 
   listNotes: async (candidateIds: string[]) => {

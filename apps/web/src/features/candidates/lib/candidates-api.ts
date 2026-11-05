@@ -20,3 +20,9 @@ export async function saveCandidate(value: CreateCandidateInput) {
 
   return response.json();
 }
+
+export async function archiveCandidate(id: string) {
+  const response = await client.candidates[":id"].archive.$post({ param: { id } });
+
+  if (!response.ok) throw new Error("Could not archive candidate");
+}

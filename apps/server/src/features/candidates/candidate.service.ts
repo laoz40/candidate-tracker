@@ -67,6 +67,10 @@ export const candidateService = {
     );
   },
 
+  archive: async (id: string) => {
+    return candidateRepository.archive(id);
+  },
+
   create: async (input: CandidateInput): Promise<CandidateResponse> => {
     const { candidate, notes } = await candidateRepository.create({
       name: input.name,

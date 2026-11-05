@@ -1,5 +1,6 @@
 import type { Dispatch } from "react";
-import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import type { ArchiveState, CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import { ArchiveCandidateButton } from "@/features/candidates/components/ArchiveCandidateButton";
 import { CandidateNotes } from "@/features/candidates/components/CandidateNotes";
 import { CandidatePaneHeader } from "@/features/candidates/components/CandidatePaneHeader";
 import { CandidateProfileFields } from "@/features/candidates/components/CandidateProfileFields";
@@ -9,10 +10,17 @@ import type { Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateSidePaneProps = {
   candidate: Candidate;
+  archiveState: ArchiveState;
+  onArchive: (candidateId: string) => Promise<void>;
   dispatch: Dispatch<CandidatesAction>;
 };
 
-export function CandidateSidePane({ candidate, dispatch }: CandidateSidePaneProps) {
+export function CandidateSidePane({
+  candidate,
+  dispatch,
+  archiveState,
+  onArchive,
+}: CandidateSidePaneProps) {
   return (
     <section
       id="candidate-detail"
@@ -28,6 +36,12 @@ export function CandidateSidePane({ candidate, dispatch }: CandidateSidePaneProp
         <CandidateResume candidate={candidate} />
         <Separator />
         <CandidateNotes candidate={candidate} />
+        <Separator />
+        <ArchiveCandidateButton
+          candidateId={candidate.id}
+          state={archiveState}
+          onArchive={onArchive}
+        />
       </div>
     </section>
   );
