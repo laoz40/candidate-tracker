@@ -39,3 +39,11 @@ AI kept adding features to the same candidate reducer until it became large, mix
 I split the reducer into candidate list state, mutation progress, and pane selection. Each reducer now handles a focused concern, making the code easier to read and maintain.
 
 Code: `apps/web/src/features/candidates/lib/candidates-reducer.ts` and the three concern reducers.
+
+## Reusing existing constants and functions
+
+When I asked AI to remove a separate constants file, it defined `DOCUMENT_MAX_CHARACTERS = 50_000` in both the document service and candidate validation schema. I corrected this to keep one exported definition and import it where needed.
+
+Duplicating a shared rule means remembering to update every copy. Missing one could make PDF extraction and candidate validation enforce different limits. This is a pattern I watch for in AI code: creating another constant or function instead of reusing what already exists.
+
+Code: `apps/server/src/features/documents/document.service.ts` and `apps/server/src/features/candidates/candidate.schema.ts`.

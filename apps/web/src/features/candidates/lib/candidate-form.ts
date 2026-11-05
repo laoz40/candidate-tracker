@@ -13,11 +13,7 @@ export const candidateFormSchema = z.object({
   phone: z.string().trim(),
   role: z.enum(activeRoles, { error: "Select a role." }),
   source: z.string().trim(),
-  resume: z
-    .string()
-    .trim()
-    .min(1, "Paste resume or cover letter text.")
-    .max(50_000, "Use no more than 50,000 characters."),
+  resume: z.string().trim().min(1, "Paste resume or cover letter text, or upload a PDF."),
   note: z.string().trim(),
 });
 

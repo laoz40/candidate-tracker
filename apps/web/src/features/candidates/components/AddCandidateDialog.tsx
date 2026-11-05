@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useResumeUpload } from "@/features/candidates/hooks/use-resume-upload";
 import { ResumeUploadButton } from "@/features/candidates/components/ResumeUploadButton";
 import {
   activeRoles,
@@ -89,6 +90,8 @@ function AddCandidateForm({
     defaultValues: emptyCandidateForm,
     validators: { onBlur: candidateFormSchema, onSubmit: candidateFormSchema },
     onSubmit: async ({ value }) => {
+      if (uploadState.kind === "extracting") return;
+
       setSubmitError(null);
 
       try {
@@ -96,10 +99,16 @@ function AddCandidateForm({
 
         dispatch({ type: "candidateCreated", candidate });
         onCreated();
-      } catch {
-        setSubmitError("Could not save candidate. Please try again.");
+      } catch (error) {
+        setSubmitError(
+          error instanceof Error ? error.message : "Could not save candidate. Please try again.",
+        );
       }
     },
+  });
+
+  const { state: uploadState, upload } = useResumeUpload((text) => {
+    form.setFieldValue("resume", text);
   });
 
   return (
@@ -118,7 +127,7 @@ function AddCandidateForm({
               type="button"
               variant="outline"
               className="self-start"
-              disabled={isSubmitting}
+              disabled={isSubmitting || uploadState.kind === "extracting"}
               onClick={() => {
                 form.reset(randomCandidateForm());
                 setSubmitError(null);
@@ -213,9 +222,18 @@ function AddCandidateForm({
               <Field data-invalid={invalid}>
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <FieldLabel htmlFor="candidate-resume">Resume or cover letter</FieldLabel>
-                  <ResumeUploadButton />
+                  <form.Subscribe selector={(state) => state.isSubmitting}>
+                    {(isSubmitting) => (
+                      <ResumeUploadButton
+                        extracting={uploadState.kind === "extracting"}
+                        disabled={isSubmitting}
+                        onUpload={upload}
+                      />
+                    )}
+                  </form.Subscribe>
                 </div>
                 <Textarea
+                  disabled={uploadState.kind === "extracting"}
                   id="candidate-resume"
                   name={field.name}
                   required
@@ -228,8 +246,10 @@ function AddCandidateForm({
                   aria-describedby="candidate-resume-description candidate-resume-error"
                 />
                 <FieldDescription id="candidate-resume-description">
-                  Paste up to 50,000 characters.
+                  Paste text or upload a text-based PDF. Review the extracted text before saving.
+                  Uploading replaces the text. Original files are not retained.
                 </FieldDescription>
+                {uploadState.kind === "error" ? <p role="alert">{uploadState.message}</p> : null}
                 {invalid ? (
                   <FieldError
                     id="candidate-resume-error"
@@ -272,7 +292,7 @@ function AddCandidateForm({
           {(isSubmitting) => (
             <Button
               type="submit"
-              disabled={isSubmitting}>
+              disabled={isSubmitting || uploadState.kind === "extracting"}>
               {isSubmitting ? (
                 <RiLoader4Line
                   data-icon="inline-start"

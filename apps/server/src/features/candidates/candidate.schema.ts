@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DOCUMENT_MAX_CHARACTERS } from "#documents/document.service";
 
 export const candidateInputSchema = z.object({
   name: z.string().trim().min(1),
@@ -6,7 +7,7 @@ export const candidateInputSchema = z.object({
   phone: z.string().trim(),
   role: z.enum(["Frontend Engineer", "Full Stack Engineer", "Product Designer"]),
   source: z.string().trim(),
-  resume: z.string().trim().min(1).max(50_000),
+  resume: z.string().trim().min(1).max(DOCUMENT_MAX_CHARACTERS),
   note: z.string().trim(),
 });
 
