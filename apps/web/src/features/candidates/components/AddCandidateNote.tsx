@@ -8,16 +8,17 @@ import type { CandidatesAction } from "@/features/candidates/lib/candidates-redu
 
 type AddCandidateNoteProps = {
   candidateId: string;
+  onClose: () => void;
   dispatch: Dispatch<CandidatesAction>;
 };
 
-export function AddCandidateNote({ candidateId, dispatch }: AddCandidateNoteProps) {
-  const { form } = useCandidateNoteForm(candidateId, dispatch);
+export function AddCandidateNote({ candidateId, dispatch, onClose }: AddCandidateNoteProps) {
+  const { form } = useCandidateNoteForm(candidateId, dispatch, onClose);
 
   return (
     <form
       noValidate
-      className="flex flex-col items-start gap-3"
+      className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-3"
       onSubmit={(event) => {
         event.preventDefault();
         void form.handleSubmit();
@@ -65,17 +66,26 @@ export function AddCandidateNote({ candidateId, dispatch }: AddCandidateNoteProp
       </form.Subscribe>
       <form.Subscribe selector={(state) => state.isSubmitting}>
         {(isSubmitting) => (
-          <Button
-            type="submit"
-            disabled={isSubmitting}>
-            {isSubmitting ? (
-              <RiLoader4Line
-                data-icon="inline-start"
-                className="animate-spin"
-              />
-            ) : null}
-            {isSubmitting ? "Saving" : "Add note"}
-          </Button>
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={isSubmitting}
+              onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}>
+              {isSubmitting ? (
+                <RiLoader4Line
+                  data-icon="inline-start"
+                  className="animate-spin"
+                />
+              ) : null}
+              {isSubmitting ? "Saving" : "Add note"}
+            </Button>
+          </div>
         )}
       </form.Subscribe>
     </form>

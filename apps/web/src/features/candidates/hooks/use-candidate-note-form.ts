@@ -8,7 +8,11 @@ const noteFormSchema = z.object({
   text: z.string().trim().min(1, "Enter a note."),
 });
 
-export function useCandidateNoteForm(candidateId: string, dispatch: Dispatch<CandidatesAction>) {
+export function useCandidateNoteForm(
+  candidateId: string,
+  dispatch: Dispatch<CandidatesAction>,
+  onSaved: () => void,
+) {
   const form = useForm({
     defaultValues: { text: "" },
     validators: { onSubmit: noteFormSchema },
@@ -17,6 +21,7 @@ export function useCandidateNoteForm(candidateId: string, dispatch: Dispatch<Can
         const note = await saveCandidateNote(candidateId, value.text.trim());
         dispatch({ type: "noteAdded", candidateId, note });
         form.reset();
+        onSaved();
       } catch {
         formApi.setErrorMap({
           onSubmit: {
