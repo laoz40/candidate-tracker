@@ -93,26 +93,9 @@ For the PDF upload flow, I mainly want the automated test to exercise the real P
 
 I have also tested the AI feature manually with the live model, and it works quite well.
 
-I may add focused testing with Vitest if necessary for small things like PDF parsing or filtering candidates.
-
 Specific unit tests for form validation or type checks aren't necessary for the scope I'm targeting. This project is set up specifically with type safety across the stack through Drizzle and Hono.
 
 It is good to test deliberately, as AI tends to love adding tests for everything. Tests can be harmful when they are tautological or give false confidence. More tests do not automatically mean better coverage of the behavior that matters.
-
-### What the automated tests cover
-
-I use end-to-end tests to check that the core flows provided in the project brief work for a user. They exercise the real UI, API, and database together.
-
-- Adding a candidate saves their details, first note, and AI summary after refreshing.
-- If AI generation fails, the candidate stays saved. Retrying saves the summary.
-- Uploading a real PDF extracts and saves its text.
-- A broken PDF shows an error without deleting existing text.
-- Changing a candidate's stage stays saved after refreshing.
-- Adding a note preserves both the original and new note after refreshing.
-- Filtering by stage shows matching candidates and hides nonmatching candidates.
-- Archiving removes a candidate from the active list after refreshing, while keeping them accessible in the archived list.
-
-Automated tests do not call the actual AI API. A local test server supplies fixed responses or a deliberate error to check how the application handles and saves them. I test the live AI feature and summary quality manually, and it has worked quite well.
 
 ## Error handling (for next steps)
 
