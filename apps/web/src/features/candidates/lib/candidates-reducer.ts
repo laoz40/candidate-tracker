@@ -7,7 +7,16 @@ export type ArchiveState =
   | { kind: "saving"; candidateId: string }
   | { kind: "error"; candidateId: string };
 
+export type CandidateSort = "newest" | "oldest" | "stage";
+
+export type CandidateFilters = {
+  stage: Stage | null;
+  role: string | null;
+  sort: CandidateSort;
+};
+
 export type CandidatesState = {
+  revision: number;
   archive: ArchiveState;
   candidates: Candidate[];
   pane: PaneState;
@@ -15,7 +24,8 @@ export type CandidatesState = {
 };
 
 export type CandidatesAction =
-  | { type: "candidatesLoaded"; candidates: Candidate[] }
+  | { type: "candidatesLoadStarted" }
+  | { type: "candidatesLoaded"; candidates: Candidate[]; revision: number }
   | { type: "candidatesLoadFailed"; message: string }
   | { type: "candidateCreated"; candidate: Candidate }
   | { type: "candidateArchiveStarted"; candidateId: string }
@@ -30,15 +40,14 @@ export function candidatesReducer(
   action: CandidatesAction,
 ): CandidatesState {
   switch (action.type) {
+    case "candidatesLoadStarted":
+      return { ...state, load: { kind: "loading" } };
     case "candidatesLoaded":
+      if (action.revision !== state.revision) return state;
+
       return {
         ...state,
-        candidates: [
-          ...state.candidates,
-          ...action.candidates.filter(
-            (candidate) => !state.candidates.some((existing) => existing.id === candidate.id),
-          ),
-        ],
+        candidates: action.candidates,
         load: { kind: "ready" },
       };
     case "candidatesLoadFailed":
@@ -47,6 +56,7 @@ export function candidatesReducer(
       return {
         ...state,
         candidates: [action.candidate, ...state.candidates],
+        revision: state.revision + 1,
         pane: { kind: "open", candidateId: action.candidate.id },
       };
     case "candidateArchiveStarted":
@@ -57,11 +67,9 @@ export function candidatesReducer(
       return {
         ...state,
         archive: { kind: "idle" },
+        revision: state.revision + 1,
         candidates: state.candidates.filter((candidate) => candidate.id !== action.candidateId),
-        pane:
-          state.pane.kind === "open" && state.pane.candidateId === action.candidateId
-            ? { kind: "closed" }
-            : state.pane,
+        pane: closeArchivedPane(state.pane, action.candidateId),
       };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };
@@ -80,4 +88,8 @@ export function candidatesReducer(
       return exhaustive;
     }
   }
+}
+
+function closeArchivedPane(pane: PaneState, candidateId: string): PaneState {
+  return pane.kind === "open" && pane.candidateId === candidateId ? { kind: "closed" } : pane;
 }

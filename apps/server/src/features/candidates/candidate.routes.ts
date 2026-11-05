@@ -1,6 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { candidateIdSchema, candidateInputSchema } from "#candidates/candidate.schema";
+import {
+  candidateIdSchema,
+  candidateInputSchema,
+  candidateListSchema,
+} from "#candidates/candidate.schema";
 import { candidateService } from "#candidates/candidate.service";
 
 const validateCandidate = zValidator("json", candidateInputSchema, (result, c) => {
@@ -12,8 +16,8 @@ const validateCandidate = zValidator("json", candidateInputSchema, (result, c) =
 });
 
 export const candidateRoutes = new Hono()
-  .get("/", async (c) => {
-    return c.json(await candidateService.list());
+  .get("/", zValidator("query", candidateListSchema), async (c) => {
+    return c.json(await candidateService.list(c.req.valid("query")));
   })
   .post("/:id/archive", zValidator("param", candidateIdSchema), async (c) => {
     const { id } = c.req.valid("param");

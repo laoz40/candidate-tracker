@@ -1,5 +1,5 @@
 import { candidateRepository } from "#candidates/candidate.repository";
-import type { CandidateInput } from "#candidates/candidate.schema";
+import type { CandidateInput, CandidateListQuery } from "#candidates/candidate.schema";
 
 export type CandidateStage = "Applied" | "Screening" | "Interview" | "Offer" | "Rejected";
 
@@ -48,8 +48,8 @@ function toCandidateResponse(
 }
 
 export const candidateService = {
-  list: async (): Promise<CandidateResponse[]> => {
-    const candidates = await candidateRepository.list();
+  list: async (query: CandidateListQuery): Promise<CandidateResponse[]> => {
+    const candidates = await candidateRepository.list(query);
     const candidateIds = candidates.map((candidate) => candidate.id);
 
     const notes = candidateIds.length ? await candidateRepository.listNotes(candidateIds) : [];

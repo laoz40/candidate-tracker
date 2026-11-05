@@ -13,11 +13,17 @@ import type { Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateTableProps = {
   candidates: Candidate[];
+  filtered: boolean;
   selectedId: string | null;
   dispatch: Dispatch<CandidatesAction>;
 };
 
-export function CandidateTable({ candidates, selectedId, dispatch }: CandidateTableProps) {
+export function CandidateTable({
+  candidates,
+  filtered,
+  selectedId,
+  dispatch,
+}: CandidateTableProps) {
   return (
     <Table aria-label="Candidates">
       <TableHeader>
@@ -37,7 +43,9 @@ export function CandidateTable({ candidates, selectedId, dispatch }: CandidateTa
             <TableCell
               colSpan={5}
               className="text-center">
-              No candidates yet. Add a candidate to get started.
+              {filtered
+                ? "No candidates match these filters."
+                : "No candidates yet. Add a candidate to get started."}
             </TableCell>
           </TableRow>
         ) : null}

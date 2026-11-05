@@ -13,3 +13,11 @@ export const candidateInputSchema = z.object({
 export type CandidateInput = z.infer<typeof candidateInputSchema>;
 
 export const candidateIdSchema = z.object({ id: z.uuid() });
+
+export const candidateListSchema = z.object({
+  stage: z.enum(["Applied", "Screening", "Interview", "Offer", "Rejected"]).optional(),
+  role: z.string().trim().min(1).optional(),
+  sort: z.enum(["newest", "oldest", "stage"]).default("newest"),
+});
+
+export type CandidateListQuery = z.infer<typeof candidateListSchema>;
