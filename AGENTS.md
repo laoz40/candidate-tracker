@@ -49,6 +49,7 @@ This is an assessment task. What will seperate my project from the rest is:
 
 - This project uses React Compiler for automatic memoization. Avoid manual `useMemo` and `useCallback` unless there is a specific need.
 - Keep React components focused on rendering and user interactions.
+- Pass `useReducer`'s typed `dispatch` directly; avoid callback props that only wrap it.
 - Prefer useReducer for related state and centralized transitions rather than scattering state and business logic across React components
 - Extract data fetching, reusable stateful logic, and external synchronisation into appropriately scoped hooks or modules.
 - Prefer derived state and event handlers over effects.
