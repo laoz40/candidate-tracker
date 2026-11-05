@@ -10,15 +10,17 @@ I chose TypeScript so I can develop faster without switching between two languag
 
 I chose Hono because it handles routing and requests that I'd otherwise need to build with Node's HTTP APIs. It supports multiple runtimes, including Node.js, Bun, and Cloudflare Workers, giving me flexibility to change where the backend runs if needed. Hono also combines the Express-style REST handlers I prefer with a typed client that can infer request and response types from the backend routes. This lets me keep type safety across the API without adopting the RPC approach I've used with tRPC and oRPC in other projects.
 
-Type safety matters to me because it catches mistakes and defines what functions and variables accept. Like linting, it limits what agents can do and helps catch incorrect assumptions in the code they produce.
+Type safety matters to me because it catches mistakes and defines what functions and variables accept. Like linting (see Linting section), it limits what agents can do and helps catch incorrect assumptions in the code they produce.
+
+Hono is newer than Express, so there are probably fewer examples and solved issues online, and less training data for AI models. That means AI might get more things wrong, so I need to check its output against the docs. I'd seen a lot of praise for Hono lately, which made me want to try it despite those tradeoffs.
 
 ## Linting
 
-AI output is non-deterministic. I use linting to turn coding expectations into automatic checks, catching patterns that models tend to produce but that I don't want in this project. This reduces reliance on agents remembering every instruction. Agents run the checks after changes, and the same checks could run before merging if CI were added.
+AI output is non-deterministic. I use linting to catch patterns I've noticed models tend to produce that I don't want in this project. This reduces reliance on agents remembering every instruction. Agents run the checks after changes, and the same checks could run before merging if CI were added.
 
-I limit cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. The aim is to keep functions small, focused, and easier to read and maintain.
+I've limited cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. The aim is to keep functions small, focused, and easier to read and maintain.
 
-Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling. Custom rules enforce backend responsibilities and prevent repository functions from combining independent database operations. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
+Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling that models always do. I have setup custom rules to enforce a more strict and consistent backend file structure. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
 
 I chose Oxlint for its speed and support for ESLint-compatible plugins.
 
