@@ -87,7 +87,7 @@ function AddCandidateForm({
       setSubmitError(null);
 
       try {
-        const candidate = await saveCandidate(value);
+        const candidate = await saveCandidate(candidateFormSchema.parse(value));
 
         dispatch({ type: "candidateCreated", candidate });
         onCreated();
