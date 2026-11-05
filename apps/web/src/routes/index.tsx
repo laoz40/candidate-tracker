@@ -16,7 +16,10 @@ function CandidatesRoute() {
     <SidebarProvider>
       <TrackerSidebar />
       <SidebarInset className="min-w-0">
-        <CandidatesHeader count={candidates.length} />
+        <CandidatesHeader
+          count={candidates.length}
+          dispatch={dispatch}
+        />
         <div className="flex min-h-0 flex-1 flex-col border-t xl:flex-row">
           <div className={cn("min-w-0 flex-1", selected && "hidden xl:block")}>
             <CandidateTable

@@ -8,6 +8,7 @@ export type CandidatesState = {
 };
 
 export type CandidatesAction =
+  | { type: "candidateCreated"; candidate: Candidate }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
   | { type: "stageChanged"; candidateId: string; stage: Stage };
@@ -17,6 +18,8 @@ export function candidatesReducer(
   action: CandidatesAction,
 ): CandidatesState {
   switch (action.type) {
+    case "candidateCreated":
+      return { ...state, candidates: [action.candidate, ...state.candidates] };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };
     case "paneClosed":
