@@ -13,7 +13,7 @@ const openai = createOpenAI({ apiKey: env.OPENAI_API_KEY });
 
 const modelConfig = {
   model: openai("gpt-6-luna"),
-  providerOptions: { openai: { store: false, reasoningEffort: "low" } },
+  providerOptions: { openai: { store: false, reasoningEffort: "none" } },
 };
 
 const resumeTextSchema = z

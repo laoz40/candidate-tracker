@@ -35,3 +35,13 @@ I chose Vercel AI SDK over a provider-specific SDK because it makes switching pr
 For this text summarisation feature, the API looked simple and the documentation detailed. Using a shared SDK should keep provider changes small. The tradeoff is that I can only use providers supported by Vercel AI SDK, but it supports all the providers I considered.
 
 I also considered TanStack AI. I had heard good things about it, particularly its type safety, but felt it was too new for this project and preferred the more mature Vercel AI SDK.
+
+### Model choice
+
+I chose `gpt-6-luna` because it offers strong capability at a low cost. Benchmarks I had seen, including Artificial Analysis and DeepSWE, gave me confidence in its performance relative to its cost. This balance mattered more to me than choosing the cheapest available model.
+
+I initially used low reasoning, then disabled reasoning and found that it still produced sufficient summaries and resisted the prompt-injection examples I tried. For this simple summarisation task, I did not see a reason to pay for additional reasoning tokens. These checks gave me confidence for this use case, although they do not establish that every prompt-injection attempt will fail.
+
+I considered cheaper alternatives, but GPT-5 nano is deprecated, and I was less confident that the other options would offer comparable performance. I have not tested them directly.
+
+Comparing more providers would take additional time and could require paid usage or minimum credit purchases beyond available free allowances. Given the project's short timeframe and Luna's already low cost, I focused on checking its behaviour for this feature.
