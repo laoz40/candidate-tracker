@@ -91,11 +91,11 @@ function DropdownMenuItem({
         {
           default: "focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground",
           destructive: "text-destructive focus:bg-destructive/10 focus:text-destructive dark:focus:bg-destructive/20",
-          neutral: "data-current:text-status-neutral-foreground focus:bg-status-neutral focus:text-status-neutral-foreground data-highlighted:bg-status-neutral data-highlighted:text-status-neutral-foreground",
-          info: "data-current:text-status-info-foreground focus:bg-status-info focus:text-status-info-foreground data-highlighted:bg-status-info data-highlighted:text-status-info-foreground",
-          progress: "data-current:text-status-progress-foreground focus:bg-status-progress focus:text-status-progress-foreground data-highlighted:bg-status-progress data-highlighted:text-status-progress-foreground",
-          success: "data-current:text-status-success-foreground focus:bg-status-success focus:text-status-success-foreground data-highlighted:bg-status-success data-highlighted:text-status-success-foreground",
-          danger: "data-current:text-status-danger-foreground focus:bg-status-danger focus:text-status-danger-foreground data-highlighted:bg-status-danger data-highlighted:text-status-danger-foreground",
+          neutral: "data-current:text-status-neutral-text focus:bg-status-neutral focus:text-status-neutral-text data-highlighted:bg-status-neutral data-highlighted:text-status-neutral-text",
+          info: "data-current:text-status-info-text focus:bg-status-info focus:text-status-info-text data-highlighted:bg-status-info data-highlighted:text-status-info-text",
+          progress: "data-current:text-status-progress-text focus:bg-status-progress focus:text-status-progress-text data-highlighted:bg-status-progress data-highlighted:text-status-progress-text",
+          success: "data-current:text-status-success-text focus:bg-status-success focus:text-status-success-text data-highlighted:bg-status-success data-highlighted:text-status-success-text",
+          danger: "data-current:text-status-danger-text focus:bg-status-danger focus:text-status-danger-text data-highlighted:bg-status-danger data-highlighted:text-status-danger-text",
         }[variant],
         className
       )}

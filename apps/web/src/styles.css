@@ -14,14 +14,19 @@
   --color-row-selected: var(--row-selected);
   --color-status-neutral: var(--status-neutral);
   --color-status-neutral-foreground: var(--status-neutral-foreground);
+  --color-status-neutral-text: var(--status-neutral-text);
   --color-status-info: var(--status-info);
   --color-status-info-foreground: var(--status-info-foreground);
+  --color-status-info-text: var(--status-info-text);
   --color-status-progress: var(--status-progress);
   --color-status-progress-foreground: var(--status-progress-foreground);
+  --color-status-progress-text: var(--status-progress-text);
   --color-status-success: var(--status-success);
   --color-status-success-foreground: var(--status-success-foreground);
+  --color-status-success-text: var(--status-success-text);
   --color-status-danger: var(--status-danger);
   --color-status-danger-foreground: var(--status-danger-foreground);
+  --color-status-danger-text: var(--status-danger-text);
 
   --font-heading: var(--font-sans);
   --font-sans: "IBM Plex Sans", sans-serif;
@@ -69,14 +74,19 @@
   --table-border: oklch(0.92 0.004 286.32);
   --row-hover: oklch(0.98 0.001 286.375);
   --row-selected: oklch(0.967 0.001 286.375);
+  --status-neutral-text: var(--status-neutral-foreground);
   --status-neutral: #e2e8f0;
   --status-neutral-foreground: #334155;
+  --status-info-text: var(--status-info-foreground);
   --status-info: #bfdbfe;
   --status-info-foreground: #1e40af;
+  --status-progress-text: var(--status-progress-foreground);
   --status-progress: #ddd6fe;
   --status-progress-foreground: #5b21b6;
+  --status-success-text: var(--status-success-foreground);
   --status-success: #a7f3d0;
   --status-success-foreground: #065f46;
+  --status-danger-text: var(--status-danger-foreground);
   --status-danger: #fecdd3;
   --status-danger-foreground: #9f1239;
 
@@ -118,14 +128,19 @@
   --table-border: oklch(0.24 0.005 285.823);
   --row-hover: oklch(0.17 0.005 285.823);
   --row-selected: oklch(0.2 0.005 285.823);
+  --status-neutral-text: #cbd5e1;
   --status-neutral: #475569;
   --status-neutral-foreground: #ffffff;
+  --status-info-text: #93c5fd;
   --status-info: #1d4ed8;
   --status-info-foreground: #ffffff;
+  --status-progress-text: #c4b5fd;
   --status-progress: #6d28d9;
   --status-progress-foreground: #ffffff;
+  --status-success-text: #6ee7b7;
   --status-success: #047857;
   --status-success-foreground: #ffffff;
+  --status-danger-text: #fda4af;
   --status-danger: #be123c;
   --status-danger-foreground: #ffffff;
 
