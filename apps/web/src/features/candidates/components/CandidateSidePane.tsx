@@ -1,0 +1,34 @@
+import type { Dispatch } from "react";
+import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
+import { CandidateNotes } from "@/features/candidates/components/CandidateNotes";
+import { CandidatePaneHeader } from "@/features/candidates/components/CandidatePaneHeader";
+import { CandidateProfileFields } from "@/features/candidates/components/CandidateProfileFields";
+import { CandidateResume } from "@/features/candidates/components/CandidateResume";
+import { Separator } from "@/components/ui/separator";
+import type { Candidate } from "@/features/candidates/lib/candidates";
+
+type CandidateSidePaneProps = {
+  candidate: Candidate;
+  dispatch: Dispatch<CandidatesAction>;
+};
+
+export function CandidateSidePane({ candidate, dispatch }: CandidateSidePaneProps) {
+  return (
+    <section
+      id="candidate-detail"
+      aria-labelledby="candidate-name"
+      className="flex min-w-0 flex-col border-t bg-background xl:w-2/5 xl:max-w-2xl xl:min-w-96 xl:shrink-0 xl:border-t-0 xl:border-l">
+      <div className="flex flex-col gap-6 overflow-y-auto p-6">
+        <CandidatePaneHeader
+          candidate={candidate}
+          dispatch={dispatch}
+        />
+        <CandidateProfileFields candidate={candidate} />
+        <Separator />
+        <CandidateResume candidate={candidate} />
+        <Separator />
+        <CandidateNotes candidate={candidate} />
+      </div>
+    </section>
+  );
+}
