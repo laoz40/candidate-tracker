@@ -28,19 +28,15 @@ I preferred Drizzle over Prisma because its query API follows familiar SQL conce
 
 I also considered typed SQL options such as Prisma TypedSQL and Effect SQL, but felt they would require more setup and integration work than I wanted for this project.
 
-## Linting
+## Linting and code environment setup
 
 AI output is non-deterministic. I use linting to catch patterns I've noticed models tend to produce that I don't want in this project. This reduces reliance on agents remembering every instruction. Agents run the checks after changes, and the same checks could run before merging if CI were added.
 
-I've limited cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. The aim is to keep functions small, focused, and easier to read and maintain.
+I've limited cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. The aim is to keep functions small, focused, and easier to read and maintain. Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling that models always do. I have setup custom rules to enforce a more strict and consistent backend file structure. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
 
-Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling that models always do. I have setup custom rules to enforce a more strict and consistent backend file structure. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
+For things that can't be enforced through linting, I write as a rule in the [AGENTS.md](../AGENTS.md). A lot of the rules I write down also come from my experience using these models, and becoming familiar with some of the stupid patterns they always do. I spent a lot of time configuring this file to allow agents to consistently perform how I want. I have also added instructions to steer agents towards getting me to explain my thought process and design decisions, so that I can document them properly and do well in this assessment task :).
 
 I chose Oxlint for its speed and support for ESLint-compatible plugins.
-
-## Validation (Zod)
-
-I chose Zod because it lets me define validation rules in schemas instead of writing the validation logic manually. It integrates well with other libraries and works in both the frontend and backend, allowing schemas to be shared where the validation requirements match. It also lets me infer TypeScript types from those schemas, keeping validation rules and types in sync while reducing duplication.
 
 ## AI integration (Vercel AI SDK)
 
@@ -87,7 +83,7 @@ I researched existing prompt-injection patterns used in hiring workflows and ada
 
 The GPT 6 Luna model resisted these prompt injections during testing.
 
-### Testing approach
+## Testing approach
 
 Playwright is good and common for end-to-end testing. I chose it because it tests the entire application, including whether the UI works as expected, the database works, and the form works. It tests that the flow works for a user.
 
@@ -103,7 +99,7 @@ Specific unit tests for form validation or type checks aren't necessary for the 
 
 It is good to test deliberately, as AI tends to love adding tests for everything. Tests can be harmful when they are tautological or give false confidence. More tests do not automatically mean better coverage of the behavior that matters.
 
-#### What the automated tests cover
+### What the automated tests cover
 
 I use end-to-end tests to check that the core flows provided in the project brief work for a user. They exercise the real UI, API, and database together.
 
