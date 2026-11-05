@@ -31,3 +31,11 @@ Code: `apps/server/src/app.ts` and `apps/server/src/features/candidates/`. Lint 
 I corrected the AI's use of separate `submitError` state in `use-candidate-note-form.ts`. I was familiar with TanStack Form and recognised that it already provides submission error handling. The updated code uses `formApi.setErrorMap`.
 
 In future, review AI code against the library's existing APIs, especially with newer libraries, to avoid unnecessary custom state or logic.
+
+## Splitting candidate state by concern
+
+AI kept adding features to the same candidate reducer until it became large, mixed several responsibilities, and hit the cyclomatic complexity limit. It then extracted `closeCandidatePane` into a helper to pass the lint check, leaving the underlying structure unchanged.
+
+I split the reducer into candidate list state, mutation progress, and pane selection. Each reducer now handles a focused concern, making the code easier to read and maintain.
+
+Code: `apps/web/src/features/candidates/lib/candidates-reducer.ts` and the three concern reducers.
