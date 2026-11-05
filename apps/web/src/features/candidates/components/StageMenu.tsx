@@ -19,16 +19,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { stages, type Candidate, type Stage } from "@/features/candidates/lib/candidates";
 
-export function StageBadge({ stage }: { stage: Stage }) {
-  const styles = {
-    Applied: { variant: "neutral", icon: RiCircleLine },
-    Screening: { variant: "info", icon: RiSearchLine },
-    Interview: { variant: "progress", icon: RiDiscussLine },
-    Offer: { variant: "success", icon: RiCheckLine },
-    Rejected: { variant: "danger", icon: RiCloseLine },
-  } as const;
+const stageStyles = {
+  Applied: { variant: "neutral", icon: RiCircleLine },
+  Screening: { variant: "info", icon: RiSearchLine },
+  Interview: { variant: "progress", icon: RiDiscussLine },
+  Offer: { variant: "success", icon: RiCheckLine },
+  Rejected: { variant: "danger", icon: RiCloseLine },
+} as const;
 
-  const { variant, icon: Icon } = styles[stage];
+export function StageBadge({ stage }: { stage: Stage }) {
+  const { variant, icon: Icon } = stageStyles[stage];
 
   return (
     <Badge variant={variant}>
@@ -73,15 +73,29 @@ export function StageMenu({ candidate, stageChangeState, onStageChange }: StageM
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuGroup>
-            {stages.map((option) => (
-              <DropdownMenuItem
-                key={option}
-                disabled={option === candidate.stage || stageChangeState.kind === "saving"}
-                onClick={() => void onStageChange(candidate.id, option)}>
-                {option}
-                {option === candidate.stage ? " (current)" : ""}
-              </DropdownMenuItem>
-            ))}
+            {stages.map((option) => {
+              const { variant, icon: Icon } = stageStyles[option];
+              const isCurrent = option === candidate.stage;
+
+              return (
+                <DropdownMenuItem
+                  key={option}
+                  variant={variant}
+                  data-current={isCurrent || undefined}
+                  disabled={isCurrent || stageChangeState.kind === "saving"}
+                  aria-label={isCurrent ? `${option}, current stage` : option}
+                  onClick={() => void onStageChange(candidate.id, option)}>
+                  <Icon />
+                  {option}
+                  {isCurrent ? (
+                    <span
+                      aria-hidden="true"
+                      className="ml-auto size-2 rounded-full bg-current"
+                    />
+                  ) : null}
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
