@@ -79,7 +79,7 @@ function backendLayer(filename) {
 
   if (filename.endsWith(".repository.ts")) return "repository";
 
-  if (filename.endsWith(".handlers.ts")) return "handler";
+  if (/\.(?:handlers|routes)\.ts$/u.test(String(filename))) return "handler";
 
   if (filename.endsWith("/app.ts")) return "app";
 
@@ -116,10 +116,10 @@ function wrongFeatureLayer(layer, source, typeOnly) {
     case "handler":
       return /\.repository(?:\.[cm]?[jt]s)?$/u.test(String(source));
     case "service":
-      return /\.handlers(?:\.[cm]?[jt]s)?$/u.test(String(source));
+      return /\.(?:handlers|routes)(?:\.[cm]?[jt]s)?$/u.test(String(source));
     case "repository":
       return (
-        /\.handlers(?:\.[cm]?[jt]s)?$/u.test(String(source)) ||
+        /\.(?:handlers|routes)(?:\.[cm]?[jt]s)?$/u.test(String(source)) ||
         (!typeOnly && /\.service(?:\.[cm]?[jt]s)?$/u.test(String(source)))
       );
     default:

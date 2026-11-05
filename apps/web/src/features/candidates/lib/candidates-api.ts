@@ -1,12 +1,12 @@
 import { hc, type InferRequestType } from "hono/client";
 import type { AppType } from "@candidate-tracker/server";
 
-const client = hc<AppType>("/");
+const client = hc<AppType>("/").api;
 
-type CreateCandidateInput = InferRequestType<typeof client.api.candidates.$post>["json"];
+type CreateCandidateInput = InferRequestType<typeof client.candidates.$post>["json"];
 
 export async function listCandidates(signal: AbortSignal) {
-  const response = await client.api.candidates.$get({}, { init: { signal } });
+  const response = await client.candidates.$get({}, { init: { signal } });
 
   if (!response.ok) throw new Error("Could not load candidates");
 
@@ -14,7 +14,7 @@ export async function listCandidates(signal: AbortSignal) {
 }
 
 export async function saveCandidate(value: CreateCandidateInput) {
-  const response = await client.api.candidates.$post({ json: value });
+  const response = await client.candidates.$post({ json: value });
 
   if (!response.ok) throw new Error("Could not save candidate");
 

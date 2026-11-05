@@ -14,6 +14,10 @@ const violation = (messageId) => ({ messageId });
 tester.run("project/no-backend-layer-imports", noBackendLayerImports, {
   valid: [
     {
+      code: 'import { Hono } from "hono"; import { candidateService } from "#candidates/candidate.service";',
+      filename: "/repo/apps/server/src/features/candidates/candidate.routes.ts",
+    },
+    {
       code: 'type CandidateInput = import("./candidate.service.js").CandidateInput;',
       filename: "/repo/apps/server/src/features/candidates/candidate.repository.ts",
     },
@@ -63,6 +67,16 @@ tester.run("project/no-backend-layer-imports", noBackendLayerImports, {
     },
   ],
   invalid: [
+    {
+      code: 'import { candidateRepository } from "#candidates/candidate.repository";',
+      filename: "/repo/apps/server/src/features/candidates/candidate.routes.ts",
+      errors: [violation("forbidden")],
+    },
+    {
+      code: 'import { candidateRoutes } from "#candidates/candidate.routes";',
+      filename: "/repo/apps/server/src/features/candidates/candidate.service.ts",
+      errors: [violation("forbidden")],
+    },
     {
       code: 'import { eq } from "drizzle-orm";',
       filename: "/repo/apps/server/src/features/candidates/candidate.service.ts",

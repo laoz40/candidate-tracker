@@ -1,10 +1,9 @@
 import { Hono } from "hono";
-import { candidateHandlers } from "#candidates/candidate.handlers";
+import { candidateRoutes } from "#candidates/candidate.routes";
 
 export const app = new Hono()
   .get("/api/health", (c) => c.json({ status: "ok" }))
-  .get("/api/candidates", ...candidateHandlers.list)
-  .post("/api/candidates", ...candidateHandlers.create)
+  .route("/api/candidates", candidateRoutes)
   .notFound((c) => c.json({ error: "Not found" }, 404));
 
 export type AppType = typeof app;
