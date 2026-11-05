@@ -14,7 +14,7 @@ export function ArchiveCandidateButton({
   return (
     <div className="flex flex-col items-start gap-2">
       <Button
-        variant="outline"
+        variant="outline-destructive"
         disabled={state.kind === "saving"}
         onClick={() => void onArchive(candidateId)}>
         {state.kind === "saving" ? (

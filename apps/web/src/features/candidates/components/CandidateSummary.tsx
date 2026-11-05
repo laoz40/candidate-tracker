@@ -25,7 +25,6 @@ export function CandidateSummary({ state, onGenerate }: CandidateSummaryProps) {
             Generate a summary of this candidate's resume.
           </p>
           <Button
-            variant="outline"
             size="sm"
             onClick={() => void onGenerate()}>
             Generate summary
@@ -46,7 +45,6 @@ export function CandidateSummary({ state, onGenerate }: CandidateSummaryProps) {
             {state.message}
           </p>
           <Button
-            variant="outline"
             size="sm"
             onClick={() => void onGenerate()}>
             Retry

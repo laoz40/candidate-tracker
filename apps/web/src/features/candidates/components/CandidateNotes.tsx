@@ -27,7 +27,6 @@ export function CandidateNotes({ candidate, dispatch }: CandidateNotesProps) {
         <Button
           type="button"
           size="sm"
-          variant="outline"
           disabled={composer === "open"}
           aria-expanded={composer === "open"}
           onClick={() => setComposer("open")}>
