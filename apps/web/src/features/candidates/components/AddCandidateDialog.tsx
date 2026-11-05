@@ -28,6 +28,7 @@ import {
   candidateFormSchema,
   emptyCandidateForm,
 } from "@/features/candidates/lib/candidate-form";
+import { randomCandidateForm } from "@/features/candidates/lib/random-candidate";
 import { saveCandidate } from "@/features/candidates/lib/candidates-api";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 
@@ -106,6 +107,23 @@ function AddCandidateForm({
         void form.handleSubmit();
       }}
       className="flex flex-col gap-6">
+      {import.meta.env.DEV ? (
+        <form.Subscribe selector={(state) => state.isSubmitting}>
+          {(isSubmitting) => (
+            <Button
+              type="button"
+              variant="outline"
+              className="self-start"
+              disabled={isSubmitting}
+              onClick={() => {
+                form.reset(randomCandidateForm());
+                setSubmitError(null);
+              }}>
+              Autofill random candidate
+            </Button>
+          )}
+        </form.Subscribe>
+      ) : null}
       <FieldGroup>
         <FieldGroup className="grid sm:grid-cols-2">
           {contactFields.map((input) => (
