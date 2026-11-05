@@ -19,7 +19,11 @@ export function candidatesReducer(
 ): CandidatesState {
   switch (action.type) {
     case "candidateCreated":
-      return { ...state, candidates: [action.candidate, ...state.candidates] };
+      return {
+        ...state,
+        candidates: [action.candidate, ...state.candidates],
+        pane: { kind: "open", candidateId: action.candidate.id },
+      };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };
     case "paneClosed":
