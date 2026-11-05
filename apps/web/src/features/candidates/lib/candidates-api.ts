@@ -8,6 +8,30 @@ type CreateCandidateInput = InferRequestType<typeof client.candidates.$post>["js
 
 export type CandidateListQuery = InferRequestType<typeof client.candidates.$get>["query"];
 
+export async function requestCandidateSummary(id: string) {
+  const response = await client.candidates[":id"].summary.$post({ param: { id } });
+
+  if (!response.ok) {
+    const result = summaryErrorSchema.parse(await response.json());
+    throw new Error(result.error, { cause: result });
+  }
+
+  return response.json();
+}
+
+export async function logCandidateSummary(id: string) {
+  try {
+    const summary = await requestCandidateSummary(id);
+    console.log("AI Summary", { candidateId: id, summary });
+  } catch (error) {
+    console.error("AI summary generation failed", {
+      candidateId: id,
+      error,
+      details: error instanceof Error ? error.cause : undefined,
+    });
+  }
+}
+
 export async function listCandidates(query: CandidateListQuery, signal: AbortSignal) {
   const response = await client.candidates.$get({ query }, { init: { signal } });
 
@@ -56,6 +80,12 @@ export async function changeCandidateStage(
 
   return response.json();
 }
+
+const summaryErrorSchema = z.object({
+  error: z.string(),
+  code: z.string().optional(),
+  details: z.string().optional(),
+});
 
 const candidateErrorSchema = z.object({
   error: z.string(),

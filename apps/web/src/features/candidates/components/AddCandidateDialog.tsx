@@ -30,7 +30,7 @@ import {
   emptyCandidateForm,
 } from "@/features/candidates/lib/candidate-form";
 import { randomCandidateForm } from "@/features/candidates/lib/random-candidate";
-import { saveCandidate } from "@/features/candidates/lib/candidates-api";
+import { logCandidateSummary, saveCandidate } from "@/features/candidates/lib/candidates-api";
 import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 
 const contactFields = [
@@ -99,6 +99,7 @@ function AddCandidateForm({
 
         dispatch({ type: "candidateCreated", candidate });
         onCreated();
+        void logCandidateSummary(candidate.id);
       } catch (error) {
         setSubmitError(
           error instanceof Error ? error.message : "Could not save candidate. Please try again.",

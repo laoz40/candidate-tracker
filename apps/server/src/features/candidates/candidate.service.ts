@@ -1,4 +1,5 @@
 import { candidateRepository } from "#candidates/candidate.repository";
+import { generateSummary } from "#ai/summary.service";
 import type { CandidateInput, CandidateListQuery } from "#candidates/candidate.schema";
 
 export type CandidateStage = "Applied" | "Screening" | "Interview" | "Offer" | "Rejected";
@@ -48,6 +49,13 @@ function toCandidateResponse(
 }
 
 export const candidateService = {
+  generateSummary: async (candidateId: string) => {
+    const candidate = await candidateRepository.findResumeById(candidateId);
+
+    if (!candidate) return undefined;
+
+    return generateSummary(candidate.resume);
+  },
   addNote: async (candidateId: string, text: string) => {
     const candidate = await candidateRepository.findById(candidateId);
 

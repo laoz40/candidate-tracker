@@ -6,6 +6,14 @@ import type { CandidateInsert, CandidateStage } from "#candidates/candidate.serv
 import type { CandidateListQuery } from "#candidates/candidate.schema";
 
 export const candidateRepository = {
+  findResumeById: async (id: string) => {
+    const [candidate] = await db
+      .select({ resume: candidates.resume })
+      .from(candidates)
+      .where(eq(candidates.id, id));
+
+    return candidate;
+  },
   list: async (query: CandidateListQuery) => {
     return db
       .select()

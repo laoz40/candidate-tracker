@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const summarySchema = z.discriminatedUnion("kind", [
+export const summarySchema = z.union([
   z.object({
     kind: z.literal("summary"),
     overview: z.string().trim().min(1),

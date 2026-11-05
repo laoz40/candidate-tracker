@@ -1,5 +1,6 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { describeSummaryError } from "#ai/summary.error";
 import {
   candidateIdSchema,
   candidateInputSchema,
@@ -18,6 +19,36 @@ const validateCandidate = zValidator("json", candidateInputSchema, (result, c) =
 });
 
 export const candidateRoutes = new Hono()
+  .post("/:id/summary", zValidator("param", candidateIdSchema), async (c) => {
+    try {
+      const summary = await candidateService.generateSummary(c.req.valid("param").id);
+
+      if (!summary) return c.json({ error: "Candidate not found" }, 404);
+
+      return c.json(summary);
+    } catch (error) {
+      const failure = describeSummaryError(
+        error instanceof Error ? error : new Error("Unknown summary failure"),
+      );
+
+      console.error("Candidate summary generation failed", {
+        candidateId: c.req.valid("param").id,
+        ...failure,
+      });
+
+      return c.json(
+        {
+          error: `${failure.message} The candidate is still saved.`,
+          code: failure.code,
+          details:
+            failure.code === "provider_error" && process.env.NODE_ENV !== "production"
+              ? failure.diagnostic
+              : undefined,
+        },
+        failure.status,
+      );
+    }
+  })
   .get("/", zValidator("query", candidateListSchema), async (c) => {
     return c.json(await candidateService.list(c.req.valid("query")));
   })
