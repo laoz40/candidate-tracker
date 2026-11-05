@@ -30,6 +30,10 @@ This is an assessment task. What will seperate my project from the rest is:
 
 ## Agent Behaviour
 
+### Verification
+
+- Run `pnpm check` after changes.
+
 ### Code maintanability
 
 - When adding a new feature, always avoid feature creep and over-engineering
