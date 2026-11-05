@@ -25,3 +25,11 @@ I wanted high-level code that clearly expressed the application logic, with impl
 I then added two lint rules to enforce this structure. `no-backend-layer-imports` blocks imports that cross the intended boundaries, such as handlers accessing the repository directly or services importing database code. `focused-repository-operations` flags repository functions that combine independent database operations, while allowing writes that must succeed together in a transaction. These checks catch the patterns automatically instead of relying on repeated instructions to agents.
 
 Code: `apps/server/src/app.ts` and `apps/server/src/features/candidates/`. Lint rules: `tools/oxlint/project.mjs` and `.oxlintrc.json`.
+
+## Splitting candidate state by concern
+
+AI kept adding features to the same candidate reducer until it became large, mixed several responsibilities, and hit the cyclomatic complexity limit. It then extracted `closeCandidatePane` into a helper to pass the lint check, leaving the underlying structure unchanged.
+
+I split the reducer into candidate list state, mutation progress, and pane selection. Each reducer now handles a focused concern, making the code easier to read and maintain.
+
+Code: `apps/web/src/features/candidates/lib/candidates-reducer.ts` and the three concern reducers.
