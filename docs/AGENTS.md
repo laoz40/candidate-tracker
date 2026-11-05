@@ -9,3 +9,5 @@
 - **Cloud and deployment reasoning:** either a working deployment or a sound one page design with sensible named services and a realistic cost range.
 - **Communication:** clarity of the README and write-up. Could someone else pick this up?
 - **Explain your decisions. We're reading your write-up as closely as your code. “I chose X because Y, and traded off Z” is what we're looking for.**
+
+Make sure that I am communicating these points clearly.
