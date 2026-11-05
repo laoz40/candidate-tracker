@@ -28,6 +28,11 @@
       "development": "./src/features/candidates/*.ts",
       "default": "./dist/features/candidates/*.js"
     },
+    "#ai/*": {
+      "types": "./src/features/ai/*.ts",
+      "development": "./src/features/ai/*.ts",
+      "default": "./dist/features/ai/*.js"
+    },
     "#documents/*": {
       "types": "./src/features/documents/*.ts",
       "development": "./src/features/documents/*.ts",
@@ -49,8 +54,10 @@
     "db:studio": "NODE_OPTIONS=--conditions=development drizzle-kit studio"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.108",
     "@hono/node-server": "^2.1.6",
     "@hono/zod-validator": "^0.9.1",
+    "ai": "^7.0.162",
     "dotenv": "^18.0.9",
     "drizzle-orm": "^0.45.4",
     "hono": "^4.13.16",
