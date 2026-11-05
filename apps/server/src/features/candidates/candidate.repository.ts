@@ -4,15 +4,27 @@ import { candidateNotes, candidates } from "#schema";
 import type { CandidateInsert, CandidateStage } from "#candidates/candidate.service";
 
 import type { CandidateListQuery } from "#candidates/candidate.schema";
+import type { Summary } from "#ai/summary.schema";
 
 export const candidateRepository = {
-  findResumeById: async (id: string) => {
+  findSummaryInputById: async (id: string) => {
     const [candidate] = await db
-      .select({ resume: candidates.resume })
+      .select({ resume: candidates.resume, summary: candidates.summary })
       .from(candidates)
       .where(eq(candidates.id, id));
 
     return candidate;
+  },
+  saveSummary: async (id: string, summary: Summary) => {
+    const [candidate] = await db
+      .update(candidates)
+      .set({ summary })
+      .where(eq(candidates.id, id))
+      .returning({ id: candidates.id });
+
+    if (!candidate) throw new Error("Candidate disappeared before the summary could be saved");
+
+    return summary;
   },
   list: async (query: CandidateListQuery) => {
     return db

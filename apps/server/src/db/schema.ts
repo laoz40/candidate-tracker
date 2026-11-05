@@ -1,4 +1,5 @@
-import { boolean, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, jsonb, pgEnum, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import type { Summary } from "#ai/summary.schema";
 
 export const candidateStage = pgEnum("candidate_stage", [
   "Applied",
@@ -18,6 +19,7 @@ export const candidates = pgTable("candidates", {
   stage: candidateStage().default("Applied").notNull(),
   source: text(),
   resume: text().notNull(),
+  summary: jsonb().$type<Summary>(),
   archived: boolean().default(false).notNull(),
 });
 

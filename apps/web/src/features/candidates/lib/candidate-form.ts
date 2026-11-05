@@ -45,6 +45,7 @@ export function createCandidate(value: z.infer<typeof candidateFormSchema>): Can
     role: value.role,
     source: value.source || null,
     resume: value.resume,
+    summary: null,
     stage: "Applied",
     date: now.toISOString(),
     notes: value.note

@@ -1,5 +1,6 @@
 import { candidateRepository } from "#candidates/candidate.repository";
 import { generateSummary } from "#ai/summary.service";
+import type { Summary } from "#ai/summary.schema";
 import type { CandidateInput, CandidateListQuery } from "#candidates/candidate.schema";
 
 export type CandidateStage = "Applied" | "Screening" | "Interview" | "Offer" | "Rejected";
@@ -26,6 +27,7 @@ type CandidateRecord = {
   stage: CandidateStage;
   source: string | null;
   resume: string;
+  summary: Summary | null;
 };
 
 export type CandidateResponse = Omit<CandidateRecord, "date"> & {
@@ -48,13 +50,34 @@ function toCandidateResponse(
   };
 }
 
+const activeSummaries = new Map<string, Promise<Summary | undefined>>();
+
+async function generateSavedSummary(candidateId: string) {
+  const candidate = await candidateRepository.findSummaryInputById(candidateId);
+
+  if (!candidate) return undefined;
+
+  if (candidate.summary) return candidate.summary;
+
+  const summary = await generateSummary(candidate.resume);
+
+  return candidateRepository.saveSummary(candidateId, summary);
+}
+
 export const candidateService = {
   generateSummary: async (candidateId: string) => {
-    const candidate = await candidateRepository.findResumeById(candidateId);
+    const active = activeSummaries.get(candidateId);
 
-    if (!candidate) return undefined;
+    if (active) return active;
 
-    return generateSummary(candidate.resume);
+    const pending = generateSavedSummary(candidateId);
+    activeSummaries.set(candidateId, pending);
+
+    try {
+      return await pending;
+    } finally {
+      activeSummaries.delete(candidateId);
+    }
   },
   addNote: async (candidateId: string, text: string) => {
     const candidate = await candidateRepository.findById(candidateId);

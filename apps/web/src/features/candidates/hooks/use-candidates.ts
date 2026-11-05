@@ -76,9 +76,11 @@ export function useCandidates(filters: CandidateFilters) {
   const selectedId = state.pane.kind === "open" ? state.pane.candidateId : null;
   const selected = state.list.candidates.find((candidate) => candidate.id === selectedId);
 
-  const summaryState: CandidateSummaryState = state.summaries.get(selectedId ?? "") ?? {
-    kind: "idle",
-  };
+  let summaryState: CandidateSummaryState = { kind: "idle" };
+
+  if (selected?.summary) summaryState = { kind: "ready", summary: selected.summary };
+
+  summaryState = state.summaries.get(selectedId ?? "") ?? summaryState;
 
   async function generateSummary() {
     if (!selectedId || summaryState.kind === "generating" || summaryState.kind === "ready") return;

@@ -1,3 +1,5 @@
+import type { requestCandidateSummary } from "@/features/candidates/lib/candidates-api";
+
 export const stages = ["Applied", "Screening", "Interview", "Offer", "Rejected"] as const;
 
 export type Stage = (typeof stages)[number];
@@ -12,6 +14,7 @@ export type Candidate = {
   stage: Stage;
   source: string | null;
   resume: string;
+  summary: Awaited<ReturnType<typeof requestCandidateSummary>> | null;
   notes: { id: string; date: string; text: string }[];
 };
 
@@ -27,6 +30,7 @@ export const sampleCandidates: Candidate[] = [
     source: "LinkedIn",
     resume:
       "Frontend engineer with two years of experience building accessible web applications with React and TypeScript.\n\nAt North Studio, built a reusable component library and worked with designers to improve the onboarding experience. Previously completed a software engineering internship focused on automated testing.\n\nBachelor of Computer Science, University of Sydney.\n\nSkills: React, TypeScript, HTML, CSS, accessibility, Playwright, Git.",
+    summary: null,
     notes: [
       {
         id: "1",
@@ -46,6 +50,7 @@ export const sampleCandidates: Candidate[] = [
     source: "Referral",
     resume:
       "Software engineer with experience building React interfaces and Node.js APIs. Worked on an internal scheduling application backed by PostgreSQL.\n\nSkills: JavaScript, React, Node.js, PostgreSQL, Docker.",
+    summary: null,
     notes: [],
   },
   {
@@ -59,6 +64,7 @@ export const sampleCandidates: Candidate[] = [
     source: "Company website",
     resume:
       "Product designer focused on clear, accessible workflows. Two years of experience in user research, prototyping and design systems.\n\nSkills: Figma, interaction design, usability testing, accessibility.",
+    summary: null,
     notes: [
       {
         id: "2",
@@ -78,6 +84,7 @@ export const sampleCandidates: Candidate[] = [
     source: "Referral",
     resume:
       "Frontend developer with experience in React and TypeScript. Built responsive interfaces and collaborated with backend engineers on API integration.\n\nSkills: React, TypeScript, CSS, Vitest.",
+    summary: null,
     notes: [],
   },
   {
@@ -91,6 +98,7 @@ export const sampleCandidates: Candidate[] = [
     source: "LinkedIn",
     resume:
       "Recent software engineering graduate. Built a community events application using React, Node.js and PostgreSQL.\n\nSkills: TypeScript, SQL, REST APIs, Git.",
+    summary: null,
     notes: [],
   },
   {
@@ -104,6 +112,7 @@ export const sampleCandidates: Candidate[] = [
     source: null,
     resume:
       "Designer with a background in visual communication and a year of digital product experience. Created prototypes and conducted moderated usability sessions.\n\nSkills: Figma, prototyping, user research.",
+    summary: null,
     notes: [],
   },
   {
@@ -117,6 +126,7 @@ export const sampleCandidates: Candidate[] = [
     source: "Company website",
     resume:
       "Web developer building responsive interfaces for small businesses. Experience with React, semantic HTML and performance optimisation.\n\nSkills: JavaScript, React, CSS, web performance.",
+    summary: null,
     notes: [],
   },
   {
@@ -130,6 +140,7 @@ export const sampleCandidates: Candidate[] = [
     source: "LinkedIn",
     resume:
       "Junior developer with experience in Python and JavaScript. Built REST APIs and contributed to an open-source documentation project.\n\nSkills: Python, JavaScript, SQL, Git.",
+    summary: null,
     notes: [],
   },
 ];
