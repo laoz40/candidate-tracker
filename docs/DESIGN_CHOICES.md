@@ -14,6 +14,20 @@ Type safety matters to me because it catches mistakes and defines what functions
 
 Hono is newer than Express, so there are probably fewer examples and solved issues online, and less training data for AI models. That means AI might get more things wrong, so I need to check its output against the docs. I'd seen a lot of praise for Hono lately, which made me want to try it despite those tradeoffs.
 
+## Database (PostgreSQL)
+
+I chose PostgreSQL because SQL suits this application's query requirements, particularly filtering candidates on the server. SQL makes it straightforward to express specific queries and return only the records the frontend needs.
+
+SQLite would also work well for an application of this size and many other use cases. I chose PostgreSQL for its widespread use and greater room to scale, particularly as concurrent writes increase. It requires a separate database service, but using Docker to run it locally makes setup easier.
+
+### ORM (Drizzle)
+
+I use Drizzle to infer TypeScript types from the database schema and check backend queries. Plain SQL without additional tooling would require more manual work to keep query results and TypeScript types aligned.
+
+I preferred Drizzle over Prisma because its query API follows familiar SQL concepts such as `select` and `from`. Prisma's ORM uses a more abstract query syntax. Drizzle lets me retain a SQL-style approach while getting type checking.
+
+I also considered typed SQL options such as Prisma TypedSQL and Effect SQL, but felt they would require more setup and integration work than I wanted for this project.
+
 ## Linting
 
 AI output is non-deterministic. I use linting to catch patterns I've noticed models tend to produce that I don't want in this project. This reduces reliance on agents remembering every instruction. Agents run the checks after changes, and the same checks could run before merging if CI were added.
@@ -48,13 +62,13 @@ Comparing more providers would take additional time and could require paid usage
 
 ### Prompt design
 
-I wrote each sentence of the prompt deliberately, keeping it concise to minimise input tokens and cost while making the task and rules explicit.
+I wrote each sentence of the prompt deliberately, keeping it very concise to minimise input tokens and cost while making the task and rules explicit.
 
 I took inspiration from the [Caveman skill](https://github.com/caveman-app/caveman), which encourages models to preserve necessary information while using fewer words. I applied that idea to the prompt itself.
 
 Images people posted online showing leaked reasoning traces from OpenAI and Anthropic models also inspired me. Their compact wording encouraged me to communicate the necessary instructions without unnecessary words.
 
-I initially included handling for empty or insufficient input. I then added a minimum character requirement to form validation to reject empty and very short submissions before they reached the model. This made the input requirements more consistent.
+I initially included handling for empty or insufficient input in the prompt. I then added a minimum character requirement to form validation to reject empty and short submissions before they reached the model. This made the input requirements more consistent and removed the need to handle it with the prompt.
 
 The full system prompt in `apps/server/src/features/ai/summary.service.ts` is:
 
@@ -71,4 +85,12 @@ I researched existing prompt-injection patterns used in hiring workflows and ada
 - An automated-review footer told the model to favour the applicant and conceal the instruction, based on [resume injections reported by Indeed](https://ceur-ws.org/Vol-4046/RecSysHR2025-paper_9.pdf).
 - A forged recruitment handover claimed hiring-panel approval and supplied an inflated summary, adapting the authority-spoofing technique in [RAPIDS](https://aclanthology.org/2026.acl-industry.127.pdf).
 
-The model resisted these examples during testing.
+The GPT 6 Luna model resisted these prompt injections during testing.
+
+## Error handling (for next steps)
+
+Exhaustive, typed error handling was outside this project's scope. If I extended it, I would use a Result-based approach to represent success and expected application errors explicitly, similar to Rust's `Result`. Go follows a related approach by returning errors as values alongside results.
+
+I prefer this because the function's type tells the caller what can go wrong. JavaScript promises type the successful value but do not declare their possible rejection types, making expected errors easier to overlook.
+
+Two TypeScript libraries I enjoy are neverthrow and Effect. neverthrow provides `Result` and `ResultAsync`, while Effect tracks expected errors in its typed error channel. These approaches let the compiler check that callers handle or propagate declared errors before using the successful value. They would make expected application failures harder to miss, although unexpected exceptions would still need handling.
