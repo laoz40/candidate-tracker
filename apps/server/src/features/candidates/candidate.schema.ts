@@ -11,3 +11,6 @@ export const candidateInputSchema = z.object({
 });
 
 export type CandidateInput = z.infer<typeof candidateInputSchema>;
+
+export const candidateIdSchema = z.object({ id: z.uuid() });
+export const candidateNoteInputSchema = z.object({ text: z.string().trim().min(1) });

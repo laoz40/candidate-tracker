@@ -27,7 +27,10 @@ export function CandidateSidePane({ candidate, dispatch }: CandidateSidePaneProp
         <Separator />
         <CandidateResume candidate={candidate} />
         <Separator />
-        <CandidateNotes candidate={candidate} />
+        <CandidateNotes
+          candidate={candidate}
+          dispatch={dispatch}
+        />
       </div>
     </section>
   );

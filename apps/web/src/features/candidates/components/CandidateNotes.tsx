@@ -1,11 +1,15 @@
+import type { Dispatch } from "react";
+import { AddCandidateNote } from "@/features/candidates/components/AddCandidateNote";
+import type { CandidatesAction } from "@/features/candidates/lib/candidates-reducer";
 import { RiChat3Line } from "@remixicon/react";
-import { formatDate, type Candidate } from "@/features/candidates/lib/candidates";
+import { type Candidate } from "@/features/candidates/lib/candidates";
 
 type CandidateNotesProps = {
-  candidate: Pick<Candidate, "notes">;
+  dispatch: Dispatch<CandidatesAction>;
+  candidate: Pick<Candidate, "id" | "notes">;
 };
 
-export function CandidateNotes({ candidate }: CandidateNotesProps) {
+export function CandidateNotes({ candidate, dispatch }: CandidateNotesProps) {
   return (
     <section
       className="flex flex-col gap-3"
@@ -26,12 +30,20 @@ export function CandidateNotes({ candidate }: CandidateNotesProps) {
             <time
               className="text-xs text-muted-foreground"
               dateTime={note.date}>
-              {formatDate(note.date)}
+              {new Intl.DateTimeFormat("en-AU", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              }).format(new Date(note.date))}
             </time>
             <p className="text-sm leading-6 whitespace-pre-line">{note.text}</p>
           </article>
         ))
       )}
+      <AddCandidateNote
+        key={candidate.id}
+        candidateId={candidate.id}
+        dispatch={dispatch}
+      />
     </section>
   );
 }

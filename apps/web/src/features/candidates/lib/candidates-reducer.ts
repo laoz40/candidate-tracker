@@ -12,6 +12,7 @@ export type CandidatesAction =
   | { type: "candidatesLoaded"; candidates: Candidate[] }
   | { type: "candidatesLoadFailed"; message: string }
   | { type: "candidateCreated"; candidate: Candidate }
+  | { type: "noteAdded"; candidateId: string; note: Candidate["notes"][number] }
   | { type: "candidateSelected"; candidateId: string }
   | { type: "paneClosed" }
   | { type: "stageChanged"; candidateId: string; stage: Stage };
@@ -39,6 +40,15 @@ export function candidatesReducer(
         ...state,
         candidates: [action.candidate, ...state.candidates],
         pane: { kind: "open", candidateId: action.candidate.id },
+      };
+    case "noteAdded":
+      return {
+        ...state,
+        candidates: state.candidates.map((candidate) =>
+          candidate.id === action.candidateId
+            ? { ...candidate, notes: [...candidate.notes, action.note] }
+            : candidate,
+        ),
       };
     case "candidateSelected":
       return { ...state, pane: { kind: "open", candidateId: action.candidateId } };

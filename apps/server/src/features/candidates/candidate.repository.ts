@@ -1,4 +1,4 @@
-import { asc, desc, inArray } from "drizzle-orm";
+import { asc, desc, eq, inArray } from "drizzle-orm";
 import { db } from "#db";
 import { candidateNotes, candidates } from "#schema";
 import type { CandidateInsert } from "#candidates/candidate.service";
@@ -14,6 +14,23 @@ export const candidateRepository = {
       .from(candidateNotes)
       .where(inArray(candidateNotes.candidateId, candidateIds))
       .orderBy(asc(candidateNotes.date), asc(candidateNotes.id));
+  },
+
+  findById: async (id: string) => {
+    const [candidate] = await db
+      .select({ id: candidates.id })
+      .from(candidates)
+      .where(eq(candidates.id, id));
+
+    return candidate;
+  },
+
+  addNote: async (candidateId: string, text: string) => {
+    const [note] = await db.insert(candidateNotes).values({ candidateId, text }).returning();
+
+    if (!note) throw new Error("Note insert returned no row");
+
+    return note;
   },
 
   create: async (input: CandidateInsert) => {
