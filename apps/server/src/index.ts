@@ -2,6 +2,7 @@ import { fileURLToPath } from "node:url";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
 import { app } from "#app";
+import { pool } from "#db";
 
 const port = Number(process.env.PORT ?? 3000);
 
@@ -20,5 +21,5 @@ app.get("*", serveStatic({ root: webRoot, path: "index.html" }));
 const server = serve({ fetch: app.fetch, port });
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
-  process.on(signal, () => server.close());
+  process.on(signal, () => server.close(() => void pool.end()));
 }

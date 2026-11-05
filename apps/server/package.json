@@ -12,6 +12,21 @@
       "types": "./src/env.ts",
       "development": "./src/env.ts",
       "default": "./dist/env.js"
+    },
+    "#db": {
+      "types": "./src/db/index.ts",
+      "development": "./src/db/index.ts",
+      "default": "./dist/db/index.js"
+    },
+    "#schema": {
+      "types": "./src/db/schema.ts",
+      "development": "./src/db/schema.ts",
+      "default": "./dist/db/schema.js"
+    },
+    "#candidates/*": {
+      "types": "./src/features/candidates/*.ts",
+      "development": "./src/features/candidates/*.ts",
+      "default": "./dist/features/candidates/*.js"
     }
   },
   "scripts": {
