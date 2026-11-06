@@ -138,7 +138,7 @@ function AddCandidateForm({
               className="self-start"
               disabled={isSubmitting || uploadState.kind === "extracting"}
               onClick={() => {
-                form.reset(randomCandidateForm());
+                form.reset(randomCandidateForm(), { keepDefaultValues: true });
                 setSubmitError(null);
               }}>
               Autofill random candidate
