@@ -17,7 +17,7 @@ The [`docs/`](docs/) directory contains the written deliverables, including the 
 
 - Git
 - Node.js >=22.12.0
-- pnpm 10.x; the project pins 10.26.1 in `package.json`
+- pnpm 10.x; the project pins 10.26.1 in [`package.json`](package.json)
 - Docker with Compose, running
 - OpenAI API key for AI summaries only
 
@@ -60,8 +60,8 @@ Stop the app with Ctrl+C. Stop PostgreSQL with `docker compose stop`.
 
 This pnpm monorepo has two apps:
 
-- [`apps/web`](apps/web): React frontend. Routes live in `src/routes`, feature UI and logic in `src/features`.
-- [`apps/server`](apps/server): Hono API. Routes, services, and repositories live in `src/features`; the Drizzle schema lives in `src/db` and migrations in `drizzle`.
+- [`apps/web`](apps/web): React frontend. Routes live in [`src/routes`](apps/web/src/routes), feature UI and logic in [`src/features`](apps/web/src/features).
+- [`apps/server`](apps/server): Hono API. Routes, services, and repositories live in [`src/features`](apps/server/src/features); the Drizzle schema lives in [`src/db`](apps/server/src/db) and migrations in [`drizzle`](apps/server/drizzle).
 
 Run commands from the repository root:
 

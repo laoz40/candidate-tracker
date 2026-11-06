@@ -13,7 +13,7 @@ This document summarises a back-and-forth discussion with AI to think through ea
 | Which frontend tools should be used? | React, Vite, TanStack Router, Query, Form, and Table, with shadcn/ui. |
 | Why these frontend tools? | Existing experience with React and the TanStack tools, type safety, and their ecosystems. shadcn/ui provides editable components and a consistent UI that supports faster initial development. |
 | Which backend framework should be used? | Hono, for its type safety and conventional, readable HTTP endpoints. |
-| How should frontend and backend be organised? | One repository using pnpm workspaces, with separate `apps/web` and `apps/server` packages and root commands to run them together. |
+| How should frontend and backend be organised? | One repository using pnpm workspaces, with separate [`apps/web`](../../apps/web) and [`apps/server`](../../apps/server) packages and root commands to run them together. |
 | How should production serving work? | A Node server can serve the API and built frontend from one origin. Specific cloud hosting remains deferred. |
 | Which database and database tooling should be used? | PostgreSQL through Docker Compose, with Drizzle. Drizzle is already familiar. |
 | Should the application run without an OpenAI API key? | Yes. Candidate management and PDF extraction remain available. Summary generation displays a clear configuration message. Simulated model responses are enabled only through explicit test configuration. |

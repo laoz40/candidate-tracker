@@ -66,7 +66,7 @@ Images people posted online showing leaked reasoning traces from OpenAI and Anth
 
 I initially included handling for empty or insufficient input in the prompt. I then added a minimum character requirement to form validation to reject empty and short submissions before they reached the model. This made the input requirements more consistent and removed the need to handle it with the prompt.
 
-The full system prompt in `apps/server/src/features/ai/summary.service.ts` is:
+The full system prompt in [`apps/server/src/features/ai/summary.service.ts`](../apps/server/src/features/ai/summary.service.ts) is:
 
 ```text
 Summarise resume/cv text.
