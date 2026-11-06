@@ -8,9 +8,9 @@ I assume this would be a low-traffic internal tool. Recruiters would manage cand
 
 I would deploy the frontend and backend together in one container. The existing Node server already serves both, so this gives the application one deployment and avoids separate frontend hosting and cross-origin configuration.
 
-A container would package Node, the application and PDF parser dependencies together. Serverless functions can also package these dependencies, including through container images on some platforms, but require additional setup for adapting how the server receives requests. Managed container hosting fits the existing HTTP server and avoids maintaining a virtual machine. I would still need to update dependencies and rebuild the image.
+A container would package Node, the application and PDF parser dependencies together. Serverless functions can also package these dependencies. Some platforms support container images, but I would need to adapt how the server receives requests. Managed container hosting fits the existing HTTP server and avoids maintaining a virtual machine. I would still need to update dependencies and rebuild the image.
 
-PostgreSQL would run separately through a managed database service. Application containers could then be replaced or scaled without replacing stored data. I would choose a managed database to reduce infrastructure maintenance, while remaining responsible for access, backup settings and schema changes.
+PostgreSQL would run separately through a managed database service. Application containers could then be replaced or scaled without replacing stored data. I would choose a managed database to reduce infrastructure maintenance. I would still manage access and backup settings, and handle schema changes.
 
 ## Proposed services
 
@@ -32,7 +32,7 @@ I would keep the existing OpenAI integration for deployment. Vercel AI SDK makes
 
 Google Cloud AI could centralise billing and access permissions. However, GPT-6 Luna is currently in private preview there, so switching would require confirming access or evaluating another available model. [Google's announcement](https://cloud.google.com/blog/products/ai-machine-learning/google-cloud-brings-openai-models-to-customers)
 
-## Deployment approaches considered:
+## Deployment approaches considered
 
 ### Serverless functions
 
@@ -57,7 +57,7 @@ Options include Google Cloud Run, Azure Container Apps and AWS ECS on Fargate.
 
 #### Pros
 
-- I can package Node, the backend, the built frontend and PDF parser dependencies in one image. This keeps deployment close to how the application runs locally.
+- One image can contain the application and its runtime dependencies, including the PDF parser. This keeps deployment close to how the application runs locally.
 - The provider maintains the underlying servers, leaving me to maintain the application.
 - If usage grows, I can run more copies without immediately introducing separate services.
 
@@ -88,8 +88,8 @@ I would consider this approach when measured costs or specific requirements make
 
 Approximate monthly costs in AUD for a small Sydney deployment:
 
-- Cloud SQL `db-f1-micro`: **A$15–20**.
-- 10 GiB SSD storage: **A$3–4**.
-- Cloud Run: **A$0–5** for the assumed low usage, using request-based billing and scaling to zero.
+- Cloud SQL `db-f1-micro` would cost **A$15 to A$20**.
+- 10 GiB SSD storage would cost **A$3 to A$4**.
+- Cloud Run would cost **A$0 to A$5** for the assumed low usage, using request-based billing and scaling to zero.
 
-I would budget **A$30–40 per month, plus AI usage and tax**, to leave some breathing room. Actual costs would depend on usage and exchange rates.
+I would budget **A$30 to A$40 per month** to allow for usage above these estimates. AI usage and tax would be extra. Actual costs would depend on usage and exchange rates.

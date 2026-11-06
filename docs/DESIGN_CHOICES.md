@@ -1,4 +1,4 @@
-# Design Choices
+# Design choices
 
 ## Frontend (React)
 
@@ -32,7 +32,7 @@ I also considered typed SQL options such as Prisma TypedSQL and Effect SQL, but 
 
 AI output is non-deterministic. I use linting to catch patterns I've noticed models tend to produce that I don't want in this project. This reduces reliance on agents remembering every instruction. Agents run the checks after changes, and the same checks could run before merging if CI were added.
 
-I've limited cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. The aim is to keep functions small, focused, and easier to read and maintain. Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling that models always do. I have setup custom rules to enforce a more strict and consistent backend file structure. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
+I've limited cyclomatic complexity to 12 to discourage functions with too many branches. Limits on nesting and statement counts also help prevent large functions that do too much. These limits discourage functions that are difficult to read and maintain. Other rules address recurring AI patterns directly. The `@shadcn/lint` plugin restricts arbitrary Tailwind styling that models always do. I've set up custom rules to enforce a stricter, consistent backend file structure. When I identify an unwanted pattern, I try to design a lint rule to prevent it from happening again.
 
 For things that can't be enforced through linting, I write as a rule in the [AGENTS.md](../AGENTS.md). A lot of the rules I write down also come from my experience using these models, and becoming familiar with some of the stupid patterns they always do. I spent a lot of time configuring this file to allow agents to consistently perform how I want. I have also added instructions to steer agents towards getting me to explain my thought process and design decisions, so that I can document them properly and do well in this assessment task :).
 
@@ -42,7 +42,7 @@ I chose Oxlint for its speed and support for ESLint-compatible plugins.
 
 I chose Vercel AI SDK over a provider-specific SDK because it makes switching providers easier. It supports OpenAI, Anthropic, Google Generative AI, and cloud options such as Amazon Bedrock, Microsoft Azure, and Google Vertex AI. Those cloud options could be useful for the deployment requirements in the project brief.
 
-For this text summarisation feature, the API looked simple and the documentation detailed. Using a shared SDK should keep provider changes small. The tradeoff is that I can only use providers supported by Vercel AI SDK, but it supports all the providers I considered.
+For this text summarisation feature, the API looked simple and the documentation detailed. Using a shared SDK should reduce the code I need to change when switching providers. It limits me to providers supported by Vercel AI SDK. The providers I considered are supported.
 
 I also considered TanStack AI. I had heard good things about it, particularly its type safety, but felt it was too new for this project and preferred the more mature Vercel AI SDK.
 
@@ -58,7 +58,7 @@ Comparing more providers would take additional time and could require paid usage
 
 ### Prompt design
 
-I wrote each sentence of the prompt deliberately, keeping it very concise to minimise input tokens and cost while making the task and rules explicit.
+I wrote each sentence of the prompt to state the task and rules in as few words as possible. This reduces input tokens and cost.
 
 I took inspiration from the [Caveman skill](https://github.com/caveman-app/caveman), which encourages models to preserve necessary information while using fewer words. I applied that idea to the prompt itself.
 
@@ -89,13 +89,13 @@ Playwright is good and common for end-to-end testing. I chose it because it test
 
 Mainly, the create candidate flow should be tested, as it is basically the entire app. It covers creating a candidate and listing candidates, and could also cover creating notes and changing stages. That efficiently covers the whole application.
 
-For the PDF upload flow, I mainly want the automated test to exercise the real PDF parser using a fixture PDF. The test should supply a fixed AI response instead of calling the actual AI API. This lets it test parsing the PDF, handling the response, and saving the candidate without spending API credits.
+For the PDF upload flow, I mainly want the automated test to exercise the real PDF parser using a fixture PDF. The test should supply a fixed AI response instead of calling the actual AI API. This tests the PDF parser and response handling without spending API credits. It also checks that the application saves the candidate.
 
 I have also tested the AI feature manually with the live model, and it works quite well.
 
-Specific unit tests for form validation or type checks aren't necessary for the scope I'm targeting. This project is set up specifically with type safety across the stack through Drizzle and Hono.
+Specific unit tests for form validation or type checks aren't necessary for the scope I'm targeting. This project uses Drizzle and Hono for type safety across the stack.
 
-It is good to test deliberately, as AI tends to love adding tests for everything. Tests can be harmful when they are tautological or give false confidence. More tests do not automatically mean better coverage of the behavior that matters.
+I choose tests deliberately because AI agents often add tests for everything. Tautological tests can give false confidence without checking the behaviour that matters.
 
 ## Error handling (for next steps)
 

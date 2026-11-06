@@ -4,7 +4,7 @@
 
 AI initially kept putting candidate validation, database queries, and response formatting in [`apps/server/src/app.ts`](../apps/server/src/app.ts). Putting everything in one file would make it harder to maintain as the app grew. I asked AI to separate the code into service and repository layers. Its first attempt moved too much logic into the repository, so I corrected that separation too.
 
-I wanted high-level code that clearly expressed the application logic, with implementation details kept in focused functions. This makes each part easier to read and change if needed. Keeping database queries abstracted limits the changes needed elsewhere if I replace the database or ORM. It can also keep less in the agents context.
+I wanted high-level code that clearly expressed the application logic, with lower-level details in focused functions. This makes each part easier to read and change if needed. Keeping database queries abstracted limits the changes needed elsewhere if I replace the database or ORM. It can also reduce the code an agent needs in its context.
 
 I then added two lint rules to enforce this structure. `no-backend-layer-imports` blocks imports that cross the intended boundaries, such as handlers accessing the repository directly or services importing database code. `focused-repository-operations` flags repository functions that combine independent database operations, while allowing writes that must succeed together in a transaction. These checks catch the patterns automatically instead of relying on repeated instructions to agents.
 
@@ -18,9 +18,9 @@ In future, review AI code against the library's existing APIs, especially with n
 
 ## Splitting candidate state by concern
 
-AI kept adding features to the same candidate reducer until it became large, mixed several responsibilities, and hit the cyclomatic complexity limit. It then extracted `closeCandidatePane` into a helper to pass the lint check, leaving the underlying structure unchanged.
+AI kept adding features to the same candidate reducer. It grew to handle several responsibilities and hit the cyclomatic complexity limit. AI then extracted `closeCandidatePane` into a helper to pass the lint check. The underlying structure did not change.
 
-I split the reducer into candidate list state, mutation progress, and pane selection. Each reducer now handles a focused concern, making the code easier to read and maintain.
+I split the reducer into candidate list state, mutation progress, and pane selection. Each reducer now handles one concern. This makes the code easier to read and maintain.
 
 Code: [`apps/web/src/features/candidates/lib/candidates-reducer.ts`](../apps/web/src/features/candidates/lib/candidates-reducer.ts) and the three concern reducers.
 
