@@ -2,6 +2,8 @@
 
 > Early Careers Engineering Assessment for Publicis Sapient
 
+# [Video Demo Link](https://youtu.be/EnkmjoedO_I)
+
 ## Written deliverables
 
 The [`docs/`](docs/) directory contains the written deliverables, including the design choices and reasoning, AI usage log, learning log, and deployment design.
