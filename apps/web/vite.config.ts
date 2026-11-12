@@ -13,5 +13,10 @@ export default defineConfig({
     tailwindcss(),
   ],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-  server: { port: 5173, strictPort: true, proxy: { "/api": "http://localhost:3000" } },
+  server: {
+    port: 5173,
+    strictPort: true,
+    allowedHosts: [".ts.net"],
+    proxy: { "/api": "http://localhost:3000" },
+  },
 });
